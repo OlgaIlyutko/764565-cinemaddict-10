@@ -6,7 +6,7 @@ const createUserRankTemplate = () =>
         <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
     </section>`;
 
-const createMenuTemplate =() =>
+const createMenuTemplate = () =>
     `<nav class="main-navigation">
         <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
         <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">13</span></a>
@@ -31,18 +31,6 @@ const createListFilmsStandardTemplate = () =>
     </section>`;
 
 const createButtonShowMoreTemplate = () => `<button class="films-list__show-more">Show more</button>`;
-
-const createListFilmsTopRatedTemplate = () =>
-    `<section class="films-list--extra">
-        <h2 class="films-list__title">Top rated</h2>
-        <div class="films-list__container"></div>
-    </section>`;
-
-const createListFilmMostCommentedTemplate = () =>
-    `<section class="films-list--extra">
-        <h2 class="films-list__title">Most commented</h2>
-        <div class="films-list__container"></div>
-    </section>`;
 
 const createCardFilmTemplate = () =>
     `<article class="film-card">
@@ -256,7 +244,7 @@ Array.from({length: 5}, () => render(listFilmsStandardContainerElement, createCa
 
 render(listFilmsStandardElement, createButtonShowMoreTemplate());
 
-const renderFilmsListExtra = (thema) => 
+const renderFilmsListExtra = (thema) =>
     `<section class="films-list--extra">
         <h2 class="films-list__title">${thema}</h2>
         <div class="films-list__container">
@@ -268,4 +256,4 @@ render(listFilmsElement, renderFilmsListExtra(`Top rated`));
 render(listFilmsElement, renderFilmsListExtra(`Most commented`));
 
 const siteFooterElement = document.querySelector(`footer`);
-render(siteFooterElement, createFilmDetailsTemplate(),`afterend`);
+render(siteFooterElement, createFilmDetailsTemplate(), `afterend`);
