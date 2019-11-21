@@ -224,7 +224,7 @@ const createFilmDetailsTemplate = () =>
 
 
 const render = (container, template, place = `beforeend`) => {
-    return container.insertAdjacentHTML(place, template);
+  return container.insertAdjacentHTML(place, template);
 };
 
 const siteHeaderElement = document.querySelector(`header`);
