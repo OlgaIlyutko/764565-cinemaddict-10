@@ -223,9 +223,7 @@ const createFilmDetailsTemplate = () =>
   </section>`;
 
 
-const render = (container, template, place = `beforeend`) => {
-  return container.insertAdjacentHTML(place, template);
-};
+const render = (container, template, place = `beforeend`) => container.insertAdjacentHTML(place, template);
 
 const siteHeaderElement = document.querySelector(`header`);
 render(siteHeaderElement, createUserRankTemplate());
