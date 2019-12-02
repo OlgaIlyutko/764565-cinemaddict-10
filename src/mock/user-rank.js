@@ -1,3 +1,5 @@
+import {getRandomInt} from './utils';
+
 const UserRank = [
   {
     min: 0,
@@ -21,16 +23,11 @@ const UserRank = [
   }
 ];
 
-const getRandomInt = (min, max) => {
-  return Math.floor(min + Math.random() * (max + 1 - min));
-};
-
 const getUserRank = () => {
   const randomUserRank = getRandomInt(0, 50);
-  const userRankElement = UserRank.find(it => {
-      return randomUserRank >= it.min && randomUserRank <= it.max;
-    }
-  );
+  const userRankElement = UserRank.find((it) => {
+    return randomUserRank >= it.min && randomUserRank <= it.max;
+  });
   return userRankElement.text;
 };
 

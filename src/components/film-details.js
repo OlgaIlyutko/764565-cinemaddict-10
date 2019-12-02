@@ -1,9 +1,8 @@
 export const createFilmDetailsTemplate = (filmInfo) => {
-  const {poster, ageLimit, title, originalTitle, raiting, director, wtiters, actors, releaseDate, duration, country, genres, description, isWatchlist, isWatched, isFavorite, comments} = filmInfo;
-  const getGenres = () => genres.map(it => `<span class="film-details__genre">${it}</span>`).join(``);
-  const commentsList = () => {
-    comments.map(it => 
-      `<li class="film-details__comment">
+  const {poster, ageLimit, title, raiting, director, wtiters, actors, releaseDate, duration, country, genres, description, isWatchlist, isWatched, isFavorite, comments} = filmInfo;
+  const getGenres = genres.map((it) => `<span class="film-details__genre">${it}</span>`).join(``);
+  const commentsList = comments.map((it) =>
+    `<li class="film-details__comment">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${it.img}" width="55" height="55" alt="emoji">
         </span>
@@ -11,14 +10,13 @@ export const createFilmDetailsTemplate = (filmInfo) => {
           <p class="film-details__comment-text">${it.commentText}</p>
             <p class="film-details__comment-info">
             <span class="film-details__comment-author">${it.commentAuthor}</span>
-            <span class="film-details__comment-day">${commentDay}</span>
+            <span class="film-details__comment-day">${it.commentDay}</span>
             <button class="film-details__comment-delete">Delete</button>
           </p>
         </div>
-      </li>`)
-  };
-
-    `<section class="film-details">
+      </li>`).join(``);
+  return `
+    <section class="film-details">
       <form class="film-details__inner" action="" method="get">
       <div class="form-details__top-container">
         <div class="film-details__close">
@@ -35,7 +33,7 @@ export const createFilmDetailsTemplate = (filmInfo) => {
           <div class="film-details__info-head">
           <div class="film-details__title-wrap">
             <h3 class="film-details__title">${title}</h3>
-            <p class="film-details__title-original">Original: ${originalTitle}</p>
+            <p class="film-details__title-original">Original: ${title}</p>
           </div>
 
           <div class="film-details__rating">
@@ -134,4 +132,4 @@ export const createFilmDetailsTemplate = (filmInfo) => {
       </div>
       </form>
     </section>`;
-  };
+};

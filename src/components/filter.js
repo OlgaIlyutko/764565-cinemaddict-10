@@ -1,5 +1,5 @@
 export const createFilterTemplate = (filters) => {
-  const filtersMarkup = filters.map((it) => createFilterMarkup(it)).join(`\n`);
+  const filtersMarkup = filters.map((it) => createFilterMarkup(it)).join(``);
   return (
     `<nav class="main-navigation">
       <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>

@@ -34,18 +34,18 @@ const listFilmsStandardElement = listFilmsElement.querySelector(`.films-list`);
 const listFilmsStandardContainerElement = listFilmsStandardElement.querySelector(`.films-list__container`);
 const films = generateFilms(FILMS_COUNT);
 let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
-films.slice(0, showingFilmsCount - 1).forEach((film) => render(listFilmsStandardContainerElement, createCardFilmTemplate(film)));
+films.slice(0, showingFilmsCount).forEach((film) => render(listFilmsStandardContainerElement, createCardFilmTemplate(film)));
 
 render(listFilmsStandardElement, createButtonShowMoreTemplate());
 
 const renderFilmsListExtra = (thema) => {
   const filmsExtra = generateFilms(2);
+  const filmsRender = filmsExtra.map((film) => createCardFilmTemplate(film)).join(``);
   return `
     <section class="films-list--extra">
       <h2 class="films-list__title">${thema}</h2>
       <div class="films-list__container">
-      ${createCardFilmTemplate(filmsExtra[0])}
-      ${createCardFilmTemplate(filmsExtra[1])}
+      ${filmsRender}
       </div>
     </section>`;
 };
@@ -57,12 +57,12 @@ const siteFooterElement = document.querySelector(`footer`);
 const filmDetails = generateFilmPopap();
 render(siteFooterElement, createFilmDetailsTemplate(filmDetails), `afterend`);
 
-const loadMoreButton = boardElement.querySelector(`.films-list__show-more`);
+const loadMoreButton = listFilmsStandardElement.querySelector(`.films-list__show-more`);
 loadMoreButton.addEventListener(`click`, () => {
   const prevFilmsCount = showingFilmsCount;
   showingFilmsCount = showingFilmsCount + SHOWING_FILMS_COUNT_BY_BUTTON;
 
-  films.slice(prevFilmsCount, showingFilmsCount - 1)
+  films.slice(prevFilmsCount, showingFilmsCount)
     .forEach((film) => render(listFilmsStandardContainerElement, createCardFilmTemplate(film)));
 
   if (showingFilmsCount >= films.length) {
