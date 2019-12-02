@@ -1,10 +1,37 @@
 const UserRank = [
-  {0, 0, ``},
-  {1, 10,  `novice`},
-  {11, 20, `fan`},
-  {21, 1000, `buff`}
+  {
+    min: 0,
+    max: 0,
+    text: ``
+  },
+  {
+    min: 1,
+    max: 10,
+    text: `novice`
+  },
+  {
+    min: 11,
+    max: 20,
+    text: `fan`
+  },
+  {
+    min: 21,
+    max: 1000,
+    text: `buff`
+  }
 ];
 
-const m = () => {
-  UserRank.filter
-}
+const getRandomInt = (min, max) => {
+  return Math.floor(min + Math.random() * (max + 1 - min));
+};
+
+const getUserRank = () => {
+  const randomUserRank = getRandomInt(0, 50);
+  const userRankElement = UserRank.find(it => {
+      return randomUserRank >= it.min && randomUserRank <= it.max;
+    }
+  );
+  return userRankElement.text;
+};
+
+export {getUserRank};
