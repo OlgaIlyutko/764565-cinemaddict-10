@@ -1,5 +1,11 @@
 export const createFilmDetailsTemplate = (filmInfo) => {
   const {poster, ageLimit, title, raiting, director, wtiters, actors, releaseDate, duration, country, genres, description, isWatchlist, isWatched, isFavorite, comments} = filmInfo;
+  const formatedDuration = (durationMinutes) => {
+    let durationFormating = ``;
+    durationFormating += (durationMinutes >= 60) ? `${Math.floor(durationMinutes / 60)}h` : ``;
+    durationFormating += (durationMinutes % 60 !== 0) ? ` ${durationMinutes % 60}min` : ``;
+    return durationFormating;
+  };
   const getGenres = genres.map((it) => `<span class="film-details__genre">${it}</span>`).join(``);
   const commentsList = comments.map((it) =>
     `<li class="film-details__comment">
@@ -60,7 +66,7 @@ export const createFilmDetailsTemplate = (filmInfo) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
-            <td class="film-details__cell">${duration}</td>
+            <td class="film-details__cell">${formatedDuration(duration)}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
