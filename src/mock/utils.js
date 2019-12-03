@@ -1,21 +1,3 @@
-const Genre = [
-  `Western`,
-  `Musical`,
-  `Drama`,
-  `Cartoon`,
-  `Comedy`
-];
-
-const Posters = [
-  `made-for-each-other.png`,
-  `popeye-meets-sinbad.png`,
-  `sagebrush-trail.jpg`,
-  `santa-claus-conquers-the-martians.jpg`,
-  `the-dance-of-life.jpg`,
-  `the-great-flamarion.jpg`,
-  `the-man-with-the-golden-arm.jpg`
-];
-
 const getRandomInt = (min, max) => {
   return Math.floor(min + Math.random() * (max + 1 - min));
 };
@@ -43,22 +25,8 @@ const getFormatedDateTime = function () {
   return `${dateTime.getFullYear()}/${(dateTime.getMonth() + 1)}/${dateTime.getDay()} ${dateTime.getHours()}:${dateTime.getMinutes()}`;
 };
 
-const getRandomGenres = (count) => {
-  return Array.from({length: count}, () => getRandomArrayItem(Genre));
+const uppercaseFirst = (word) => {
+  return word.charAt(0).toUpperCase() + word.slice(1)
 };
 
-const getDuration = () => {
-  const durationMinutes = getRandomInt(0, 100);
-  let durationFormating = ``;
-  if (durationMinutes >= 60) {
-    durationFormating += `${Math.floor(durationMinutes / 60)}h`;
-  }
-  if (durationMinutes % 60 !== 0) {
-    durationFormating += ` ${durationMinutes % 60}min`;
-  }
-  return durationFormating;
-};
-
-const getRandomPosters = () => getRandomArrayItem(Posters);
-
-export {getRandomInt, getRandomFloat, getRandomArrayItem, getFormatedDate, getFormatedDateTime, getRandomGenres, getDuration, getRandomPosters};
+export {getRandomInt, getRandomFloat, getRandomArrayItem, getFormatedDate, getFormatedDateTime, uppercaseFirst};
