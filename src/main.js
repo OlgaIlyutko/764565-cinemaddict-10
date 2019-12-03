@@ -9,7 +9,6 @@ import {createFilmDetailsTemplate} from './components/film-details';
 import {generateFilms} from './mock/card-film';
 import {generateFilters} from './mock/filter';
 import {getUserRank} from './mock/user-rank';
-import {generateFilmPopap} from './mock/film-details';
 
 const FILMS_COUNT = 12;
 const SHOWING_FILMS_COUNT_ON_START = 5;
@@ -54,8 +53,7 @@ render(listFilmsElement, renderFilmsListExtra(`Top rated`));
 render(listFilmsElement, renderFilmsListExtra(`Most commented`));
 
 const siteFooterElement = document.querySelector(`footer`);
-const filmDetails = generateFilmPopap();
-render(siteFooterElement, createFilmDetailsTemplate(filmDetails), `afterend`);
+render(siteFooterElement, createFilmDetailsTemplate(films[0]), `afterend`);
 
 const loadMoreButton = listFilmsStandardElement.querySelector(`.films-list__show-more`);
 loadMoreButton.addEventListener(`click`, () => {
