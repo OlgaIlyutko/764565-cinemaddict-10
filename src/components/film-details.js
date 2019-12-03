@@ -1,3 +1,5 @@
+import {getFormatedDate} from '../mock/utils';
+
 export const createFilmDetailsTemplate = (filmInfo) => {
   const {poster, ageLimit, title, raiting, director, wtiters, actors, releaseDate, duration, country, genres, description, isWatchlist, isWatched, isFavorite, comments} = filmInfo;
   const formatedDuration = (durationMinutes) => {
@@ -62,7 +64,7 @@ export const createFilmDetailsTemplate = (filmInfo) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Release Date</td>
-            <td class="film-details__cell">${releaseDate}</td>
+            <td class="film-details__cell">${getFormatedDate(releaseDate)}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>

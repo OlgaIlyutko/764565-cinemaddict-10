@@ -17,7 +17,7 @@ const getRandomDateTime = () => {
 };
 
 const getFormatedDate = function (date, options = {year: `numeric`, month: `long`, day: `numeric`}) {
-  return new Intl.DateTimeFormat(`en-GB`, options).format(getRandomDateTime());
+  return new Intl.DateTimeFormat(`en-GB`, options).format(date);
 };
 
 const getFormatedDateTime = function () {
@@ -26,7 +26,7 @@ const getFormatedDateTime = function () {
 };
 
 const uppercaseFirst = (word) => {
-  return word.charAt(0).toUpperCase() + word.slice(1)
+  return word.charAt(0).toUpperCase() + word.slice(1);
 };
 
-export {getRandomInt, getRandomFloat, getRandomArrayItem, getFormatedDate, getFormatedDateTime, uppercaseFirst};
+export {getRandomInt, getRandomFloat, getRandomArrayItem, getFormatedDate, getFormatedDateTime, getRandomDateTime, uppercaseFirst};

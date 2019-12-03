@@ -1,5 +1,5 @@
 export const createCardFilmTemplate = (film) => {
-  const {poster, ,title, raiting, , , , releaseDate, duration, , genres, description, isWatchlist, isWatched, isFavorite, comments} = film;
+  const {poster, title, raiting, releaseDate, duration, genres, description, isWatchlist, isWatched, isFavorite, comments} = film;
   const controlClass = (controlName) => {
     return controlName ? ` film-card__controls-item--active` : ``;
   };

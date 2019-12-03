@@ -1,4 +1,4 @@
-import {getRandomInt, getRandomFloat, getRandomArrayItem, getFormatedDate, getFormatedDateTime, getRandomGenres, getDuration, getRandomPosters} from './utils';
+import {getRandomInt, getRandomFloat, getRandomArrayItem, getRandomDateTime, getFormatedDateTime} from './utils';
 
 const GENRES = [
   `Western`,
