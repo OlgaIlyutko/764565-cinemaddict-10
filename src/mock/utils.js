@@ -1,3 +1,8 @@
+const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
 const getRandomInt = (min, max) => {
   return Math.floor(min + Math.random() * (max + 1 - min));
 };
@@ -29,4 +34,22 @@ const uppercaseFirst = (word) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 };
 
-export {getRandomInt, getRandomFloat, getRandomArrayItem, getFormatedDate, getFormatedDateTime, getRandomDateTime, uppercaseFirst};
+const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.BEFOREEND: 
+      container.prepend(element);
+      break;
+      case RenderPosition.AFTERBEGIN: 
+      container.append(element);
+      break;
+  }  
+};
+
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
+
+
+export {getRandomInt, getRandomFloat, getRandomArrayItem, getFormatedDate, getFormatedDateTime, getRandomDateTime, uppercaseFirst, render, RenderPosition, createElement};
