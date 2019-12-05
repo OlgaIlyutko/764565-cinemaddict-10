@@ -15,7 +15,7 @@ export default class ListFilmsExtra {
   getTemplate() {
     return createListFilmsExtraTemplate(this._thema);
   }
-  getElement(){
+  getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

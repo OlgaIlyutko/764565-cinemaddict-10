@@ -9,7 +9,7 @@ export default class ListFilms {
   getTemplate() {
     return createListFilmsTemplate();
   }
-  getElement(){
+  getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

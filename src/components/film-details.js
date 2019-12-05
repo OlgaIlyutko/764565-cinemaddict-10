@@ -23,8 +23,8 @@ const createFilmDetailsTemplate = (filmInfo) => {
           </p>
         </div>
       </li>`).join(``);
-  return `
-    <section class="film-details">
+  return (
+    `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
       <div class="form-details__top-container">
         <div class="film-details__close">
@@ -139,7 +139,8 @@ const createFilmDetailsTemplate = (filmInfo) => {
         </section>
       </div>
       </form>
-    </section>`;
+    </section>`
+  );
 };
 
 export default class FilmDetails {
@@ -150,7 +151,7 @@ export default class FilmDetails {
   getTemplate() {
     return createFilmDetailsTemplate(this._film);
   }
-  getElement(){
+  getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

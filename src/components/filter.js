@@ -23,7 +23,7 @@ export default class Filter {
   getTemplate() {
     return createFilterTemplate(this._filters);
   }
-  getElement(){
+  getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

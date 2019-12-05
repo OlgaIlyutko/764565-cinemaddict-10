@@ -11,8 +11,8 @@ const createCardFilmTemplate = (film) => {
     durationFormating += (durationMinutes % 60 !== 0) ? ` ${durationMinutes % 60}min` : ``;
     return durationFormating;
   };
-  return `
-    <article class="film-card">
+  return (
+    `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
       <p class="film-card__rating">${raiting}</p>
       <p class="film-card__info">
@@ -28,7 +28,8 @@ const createCardFilmTemplate = (film) => {
       <button class="film-card__controls-item button film-card__controls-item--mark-as-watched${controlClass(isWatched)}">Mark as watched</button>
       <button class="film-card__controls-item button film-card__controls-item--favorite${controlClass(isFavorite)}">Mark as favorite</button>
       </form>
-    </article>`;
+    </article>`
+  );
 };
 
 export default class CardFilm {
@@ -39,7 +40,7 @@ export default class CardFilm {
   getTemplate() {
     return createCardFilmTemplate(this._film);
   }
-  getElement(){
+  getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

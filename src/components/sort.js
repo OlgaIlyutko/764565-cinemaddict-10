@@ -14,7 +14,7 @@ export default class Sort {
   getTemplate() {
     return createSortTemplate();
   }
-  getElement(){
+  getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }

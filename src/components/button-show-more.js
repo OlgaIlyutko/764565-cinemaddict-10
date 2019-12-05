@@ -9,7 +9,7 @@ export default class ButtonShowMore {
   getTemplate() {
     return createButtonShowMoreTemplate();
   }
-  getElement(){
+  getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
@@ -19,4 +19,3 @@ export default class ButtonShowMore {
     this._element = null;
   }
 }
-  

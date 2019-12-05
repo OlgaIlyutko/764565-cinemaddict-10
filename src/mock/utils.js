@@ -36,13 +36,13 @@ const uppercaseFirst = (word) => {
 
 const render = (container, element, place) => {
   switch (place) {
-    case RenderPosition.BEFOREEND: 
+    case RenderPosition.BEFOREEND:
       container.prepend(element);
       break;
-      case RenderPosition.AFTERBEGIN: 
+    case RenderPosition.AFTERBEGIN:
       container.append(element);
       break;
-  }  
+  }
 };
 
 const createElement = (template) => {
