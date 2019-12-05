@@ -3,7 +3,7 @@
 * Студент: [Ольга Ильютко](https://up.htmlacademy.ru/ecmascript/10/user/764565).
 * Наставник: [Сергей Вохмянин](https://htmlacademy.ru/profile/id530823).
 
----
+--
 
 _Не удаляйте и не изменяйте папки и файлы:_
 _`.editorconfig`, `.gitattributes`, `.gitignore`, `.travis.yml`, `package.json`._

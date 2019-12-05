@@ -1,20 +1,28 @@
 import {createUserRankTemplate} from './components/user-rank';
-import {createMenuTemplate} from './components/menu';
+import {createFilterTemplate} from './components/filter';
 import {createSortTemplate} from './components/sort';
 import {createListFilmsTemplate} from './components/list-films';
 import {createListFilmsStandardTemplate} from './components/list-films-standard';
 import {createCardFilmTemplate} from './components/card-film';
 import {createButtonShowMoreTemplate} from './components/button-show-more';
 import {createFilmDetailsTemplate} from './components/film-details';
+import {generateFilms} from './mock/card-film';
+import {generateFilters} from './mock/filter';
+import {getUserRank} from './mock/user-rank';
 
+const FILMS_COUNT = 12;
+const SHOWING_FILMS_COUNT_ON_START = 5;
+const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
 
 const render = (container, template, place = `beforeend`) => container.insertAdjacentHTML(place, template);
 
 const siteHeaderElement = document.querySelector(`header`);
-render(siteHeaderElement, createUserRankTemplate());
+const rank = getUserRank();
+render(siteHeaderElement, createUserRankTemplate(rank));
 
 const siteMainElement = document.querySelector(`main`);
-render(siteMainElement, createMenuTemplate());
+const filters = generateFilters();
+render(siteMainElement, createFilterTemplate(filters));
 render(siteMainElement, createSortTemplate());
 render(siteMainElement, createListFilmsTemplate());
 
@@ -23,20 +31,39 @@ render(listFilmsElement, createListFilmsStandardTemplate());
 
 const listFilmsStandardElement = listFilmsElement.querySelector(`.films-list`);
 const listFilmsStandardContainerElement = listFilmsStandardElement.querySelector(`.films-list__container`);
-Array.from({length: 5}, () => render(listFilmsStandardContainerElement, createCardFilmTemplate()));
+const films = generateFilms(FILMS_COUNT);
+let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
+films.slice(0, showingFilmsCount).forEach((film) => render(listFilmsStandardContainerElement, createCardFilmTemplate(film)));
 
 render(listFilmsStandardElement, createButtonShowMoreTemplate());
 
-const renderFilmsListExtra = (thema) =>
-  `<section class="films-list--extra">
+const renderFilmsListExtra = (thema) => {
+  const filmsExtra = generateFilms(2);
+  const filmsRender = filmsExtra.map((film) => createCardFilmTemplate(film)).join(``);
+  return `
+    <section class="films-list--extra">
       <h2 class="films-list__title">${thema}</h2>
       <div class="films-list__container">
-      ${Array.from({length: 2}, () => createCardFilmTemplate())}
+      ${filmsRender}
       </div>
-  </section>`;
+    </section>`;
+};
 
 render(listFilmsElement, renderFilmsListExtra(`Top rated`));
 render(listFilmsElement, renderFilmsListExtra(`Most commented`));
 
 const siteFooterElement = document.querySelector(`footer`);
-render(siteFooterElement, createFilmDetailsTemplate(), `afterend`);
+render(siteFooterElement, createFilmDetailsTemplate(films[0]), `afterend`);
+
+const loadMoreButton = listFilmsStandardElement.querySelector(`.films-list__show-more`);
+loadMoreButton.addEventListener(`click`, () => {
+  const prevFilmsCount = showingFilmsCount;
+  showingFilmsCount = showingFilmsCount + SHOWING_FILMS_COUNT_BY_BUTTON;
+
+  films.slice(prevFilmsCount, showingFilmsCount)
+    .forEach((film) => render(listFilmsStandardContainerElement, createCardFilmTemplate(film)));
+
+  if (showingFilmsCount >= films.length) {
+    loadMoreButton.remove();
+  }
+});
