@@ -23,22 +23,23 @@ const renderFilm = (containerElement, film) => {
   const posterFilm = cardFilmComponent.getElement().querySelector(`img`);
   const titleFilm = cardFilmComponent.getElement().querySelector(`.film-card__title`);
   const commentsFilm = cardFilmComponent.getElement().querySelector(`.film-card__comments`);
+  const siteFooterElement = document.querySelector(`footer`);
   posterFilm.addEventListener(`click`, () => {
-    containerElement.replaceChild(filmDetailsComponent.getElement(), cardFilmComponent.getElement());
+    render(siteFooterElement, filmDetailsComponent.getElement(), RenderPosition.AFTERBEGIN);
   });
   titleFilm.addEventListener(`click`, () => {
-    containerElement.replaceChild(filmDetailsComponent.getElement(), cardFilmComponent.getElement());
+    render(siteFooterElement, filmDetailsComponent.getElement(), RenderPosition.AFTERBEGIN);
   });
   commentsFilm.addEventListener(`click`, () => {
-    containerElement.replaceChild(filmDetailsComponent.getElement(), cardFilmComponent.getElement());
+    render(siteFooterElement, filmDetailsComponent.getElement(), RenderPosition.AFTERBEGIN);
   });
 
   const closeFilmDetails = filmDetailsComponent.getElement().querySelector(`.film-details__close-btn`);
   closeFilmDetails.addEventListener(`click`, () => {
-    containerElement.replaceChild(cardFilmComponent.getElement(), filmDetailsComponent.getElement());
+    filmDetailsComponent.getElement().remove();
   });
 
-  render(containerElement, new CardFilmComponent(film).getElement(), RenderPosition.AFTERBEGIN);
+  render(containerElement, cardFilmComponent.getElement(), RenderPosition.AFTERBEGIN);
 };
 
 const siteHeaderElement = document.querySelector(`header`);
