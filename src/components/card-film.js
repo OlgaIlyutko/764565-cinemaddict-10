@@ -1,4 +1,6 @@
-export const createCardFilmTemplate = (film) => {
+import {createElement} from '../mock/utils';
+
+const createCardFilmTemplate = (film) => {
   const {poster, title, raiting, releaseDate, duration, genres, description, isWatchlist, isWatched, isFavorite, comments} = film;
   const controlClass = (controlName) => {
     return controlName ? ` film-card__controls-item--active` : ``;
@@ -28,3 +30,22 @@ export const createCardFilmTemplate = (film) => {
       </form>
     </article>`;
 };
+
+export default class CardFilm {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+  getTemplate() {
+    return createCardFilmTemplate(this._film);
+  }
+  getElement(){
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}
