@@ -1,6 +1,6 @@
-import {getFormatedDate} from '../mock/utils';
+import {getFormatedDate, createElement} from '../mock/utils';
 
-export const createFilmDetailsTemplate = (filmInfo) => {
+const createFilmDetailsTemplate = (filmInfo) => {
   const {poster, ageLimit, title, raiting, director, wtiters, actors, releaseDate, duration, country, genres, description, isWatchlist, isWatched, isFavorite, comments} = filmInfo;
   const formatedDuration = (durationMinutes) => {
     let durationFormating = ``;
@@ -23,8 +23,8 @@ export const createFilmDetailsTemplate = (filmInfo) => {
           </p>
         </div>
       </li>`).join(``);
-  return `
-    <section class="film-details">
+  return (
+    `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
       <div class="form-details__top-container">
         <div class="film-details__close">
@@ -139,5 +139,25 @@ export const createFilmDetailsTemplate = (filmInfo) => {
         </section>
       </div>
       </form>
-    </section>`;
+    </section>`
+  );
 };
+
+export default class FilmDetails {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,6 @@
-export const createCardFilmTemplate = (film) => {
+import {createElement} from '../mock/utils';
+
+const createCardFilmTemplate = (film) => {
   const {poster, title, raiting, releaseDate, duration, genres, description, isWatchlist, isWatched, isFavorite, comments} = film;
   const controlClass = (controlName) => {
     return controlName ? ` film-card__controls-item--active` : ``;
@@ -9,8 +11,8 @@ export const createCardFilmTemplate = (film) => {
     durationFormating += (durationMinutes % 60 !== 0) ? ` ${durationMinutes % 60}min` : ``;
     return durationFormating;
   };
-  return `
-    <article class="film-card">
+  return (
+    `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
       <p class="film-card__rating">${raiting}</p>
       <p class="film-card__info">
@@ -26,5 +28,25 @@ export const createCardFilmTemplate = (film) => {
       <button class="film-card__controls-item button film-card__controls-item--mark-as-watched${controlClass(isWatched)}">Mark as watched</button>
       <button class="film-card__controls-item button film-card__controls-item--favorite${controlClass(isFavorite)}">Mark as favorite</button>
       </form>
-    </article>`;
+    </article>`
+  );
 };
+
+export default class CardFilm {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+  getTemplate() {
+    return createCardFilmTemplate(this._film);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}
