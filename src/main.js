@@ -29,10 +29,19 @@ const renderFilm = (containerElement, film) => {
   const filmPopapOpen = () => {
     render(siteFooterElement, filmDetailsComponent.getElement(), RenderPosition.AFTERBEGIN);
   };
-  
-  posterFilm.addEventListener(`click`, () => filmPopapOpen());
-  titleFilm.addEventListener(`click`, () => filmPopapOpen());
-  commentsFilm.addEventListener(`click`, () => filmPopapOpen());
+
+  posterFilm.addEventListener(`click`, () => {
+    filmPopapOpen();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
+  titleFilm.addEventListener(`click`, () => {
+    filmPopapOpen();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
+  commentsFilm.addEventListener(`click`, () => {
+    filmPopapOpen();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
 
   const filmPopapClose = () => {
     filmDetailsComponent.getElement().remove();
@@ -61,13 +70,13 @@ const siteMainElement = document.querySelector(`main`);
 const filters = generateFilters();
 render(siteMainElement, new FilterComponent(filters).getElement(), RenderPosition.AFTERBEGIN);
 
-render(siteMainElement, new SortComponent().getElement());
+render(siteMainElement, new SortComponent().getElement(), RenderPosition.AFTERBEGIN);
 
 render(siteMainElement, new ListFilmsComponent().getElement(), RenderPosition.AFTERBEGIN);
 const listFilmsElement = siteMainElement.querySelector(`.films`);
 
 const films = generateFilms(FILMS_COUNT);
-if (films.length == 0) {
+if (films.length === 0) {
   render(listFilmsElement, new NoFilmsComponent().getElement(), RenderPosition.AFTERBEGIN);
 } else {
   render(listFilmsElement, new ListFilmsStandardComponent().getElement(), RenderPosition.AFTERBEGIN);
@@ -76,7 +85,7 @@ if (films.length == 0) {
 
   const listFilmsStandardElement = listFilmsElement.querySelector(`.films-list`);
   const listFilmsStandardContainerElement = listFilmsStandardElement.querySelector(`.films-list__container`);
-  const films = generateFilms(FILMS_COUNT);
+
   let showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
 
   films.slice(0, showingFilmsCount).forEach((film) => renderFilm(listFilmsStandardContainerElement, film));
