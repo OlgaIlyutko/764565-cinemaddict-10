@@ -1,4 +1,4 @@
-import {createElement} from '../mock/utils';
+import AbstractComponent from './abstract-component';
 
 const createListFilmsExtraTemplate = (thema) =>
   `<section class="films-list--extra">
@@ -7,21 +7,12 @@ const createListFilmsExtraTemplate = (thema) =>
     </div>
   </section>`;
 
-export default class ListFilmsExtra {
+export default class ListFilmsExtra extends AbstractComponent {
   constructor(thema) {
-    this._element = null;
+    super();
     this._thema = thema;
   }
   getTemplate() {
     return createListFilmsExtraTemplate(this._thema);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

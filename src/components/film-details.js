@@ -1,4 +1,5 @@
-import {getFormatedDate, createElement} from '../mock/utils';
+import {getFormatedDate} from '../utils/formatting';
+import AbstractComponent from './abstract-component';
 
 const createFilmDetailsTemplate = (filmInfo) => {
   const {poster, ageLimit, title, raiting, director, wtiters, actors, releaseDate, duration, country, genres, description, isWatchlist, isWatched, isFavorite, comments} = filmInfo;
@@ -143,21 +144,17 @@ const createFilmDetailsTemplate = (filmInfo) => {
   );
 };
 
-export default class FilmDetails {
+export default class FilmDetails extends AbstractComponent {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
   }
   getTemplate() {
     return createFilmDetailsTemplate(this._film);
   }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
+
+  setCloseButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, handler);
   }
 }

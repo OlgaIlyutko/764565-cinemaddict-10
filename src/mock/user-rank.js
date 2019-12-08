@@ -1,4 +1,4 @@
-import {getRandomInt} from './utils';
+import {getRandomInt} from '../utils/random';
 
 const UserRank = [
   {
