@@ -18,15 +18,25 @@ export default class Sort extends AbstractComponent {
     super();
     this._currentSortType = SortType.DEFAULT;
   }
-  
+
   getTemplate() {
     return createSortTemplate();
   }
 
   setSortTypeChangeHandler(handler) {
+    const changeActiveClass = (evt) => {
+      const sortButton = document.querySelectorAll(`.sort__button`);
+
+      const currentSortButton = Array.from(sortButton).find((it) => {
+        return it.dataset.sortType === this._currentSortType;
+      });
+      currentSortButton.classList.remove(`sort__button--active`);
+      evt.target.classList.add(`sort__button--active`);
+    };
+
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
-      if (evt.target.tagNme !== `A`) {
+      if (evt.target.tagName !== `A`) {
         return;
       }
 
@@ -36,8 +46,10 @@ export default class Sort extends AbstractComponent {
         return;
       }
 
+      changeActiveClass(evt);
+
       this._currentSortType = sortType;
       handler(this._currentSortType);
-    })
+    });
   }
 }
