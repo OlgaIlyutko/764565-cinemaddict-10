@@ -1,4 +1,4 @@
-import {createElement} from '../mock/utils';
+import AbstractComponent from './abstract-component';
 
 const createCardFilmTemplate = (film) => {
   const {poster, title, raiting, releaseDate, duration, genres, description, isWatchlist, isWatched, isFavorite, comments} = film;
@@ -32,21 +32,27 @@ const createCardFilmTemplate = (film) => {
   );
 };
 
-export default class CardFilm {
+export default class CardFilm extends AbstractComponent {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
   }
   getTemplate() {
     return createCardFilmTemplate(this._film);
   }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
+
+  setImgClickHandler(handler) {
+    this.getElement().querySelector(`img`)
+      .addEventListener(`click`, handler);
   }
-  removeElement() {
-    this._element = null;
+
+  setTitleClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__title`)
+      .addEventListener(`click`, handler);
+  }
+
+  setCommentsClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__comments`)
+      .addEventListener(`click`, handler);
   }
 }

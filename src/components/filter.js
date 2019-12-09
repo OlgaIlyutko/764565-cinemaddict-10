@@ -1,4 +1,5 @@
-import {uppercaseFirst, createElement} from '../mock/utils';
+import {uppercaseFirst} from '../utils/formatting';
+import AbstractComponent from './abstract-component';
 
 const createFilterTemplate = (filters) => {
   const filtersMarkup = filters.map((it) => createFilterMarkup(it)).join(``);
@@ -15,21 +16,12 @@ const createFilterMarkup = (filter) => {
   return `<a href="#${name}" class="main-navigation__item">${uppercaseFirst(name)} <span class="main-navigation__item-count">${count}</span></a>`;
 };
 
-export default class Filter {
+export default class Filter extends AbstractComponent {
   constructor(filters) {
-    this._element = null;
+    super();
     this._filters = filters;
   }
   getTemplate() {
     return createFilterTemplate(this._filters);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }
