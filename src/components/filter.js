@@ -1,7 +1,9 @@
 import {uppercaseFirst} from '../utils/formatting';
 import AbstractComponent from './abstract-component';
+import {generateFilters} from '../mock/filter';
 
-const createFilterTemplate = (filters) => {
+const createFilterTemplate = () => {
+  const filters = generateFilters();
   const filtersMarkup = filters.map((it) => createFilterMarkup(it)).join(``);
   return (
     `<nav class="main-navigation">
@@ -17,11 +19,7 @@ const createFilterMarkup = (filter) => {
 };
 
 export default class Filter extends AbstractComponent {
-  constructor(filters) {
-    super();
-    this._filters = filters;
-  }
   getTemplate() {
-    return createFilterTemplate(this._filters);
+    return createFilterTemplate();
   }
 }
