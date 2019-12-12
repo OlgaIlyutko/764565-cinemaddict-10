@@ -12,9 +12,9 @@ import MovieController from './movei';
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
 
-const renderFilms = (containerElement, films) => {
+const renderFilms = (containerElement, films, onDataChange) => {
   return films.map((film) => {
-    const filmController = new MovieController(containerElement);
+    const filmController = new MovieController(containerElement, onDataChange);
     filmController.render(film);
 
     return MovieController;
@@ -23,6 +23,7 @@ const renderFilms = (containerElement, films) => {
 
 export default class PageController {
   constructor(container) {
+    let _container =blalba;
     this._container = container;
 
     this._films = [];
@@ -38,8 +39,10 @@ export default class PageController {
     this._listFilmsExtraMostCommentedComponent = new ListFilmsExtraComponent(`Most commented`);
     this._buttonShowMoreComponent = new ButtonShowMoreComponent();
 
+    this._listFilmsStandardContainerElement = this._listFilmsStandardComponent.getElement().querySelector(`.films-list__container`);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
 
+    this._onDataChange = this._onDataChange.bind(this);
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
@@ -56,7 +59,7 @@ export default class PageController {
     render(filmsBlock, this._listFilmsStandardComponent, RenderPosition.BEFOREEND);
     const listFilmsStandardElement = this._listFilmsStandardComponent.getElement();
 
-    const isNoFilms = (this._films.length === 0) ? true : false;
+    const isNoFilms = this._films.length === 0;
     if (isNoFilms) {
       while (listFilmsStandardElement.firstChild) {
         listFilmsStandardElement.removeChild(listFilmsStandardElement.firstChild);
@@ -67,18 +70,18 @@ export default class PageController {
     
     render(filmsBlock, this._listFilmsExtraTopRatedComponent, RenderPosition.BEFOREEND);
     render(filmsBlock, this._listFilmsExtraMostCommentedComponent, RenderPosition.BEFOREEND);
-
-    const listFilmsStandardContainerElement = listFilmsStandardElement.querySelector(`.films-list__container`);
-    const newFilms = renderFilms(listFilmsStandardContainerElement, this._films.slice(0, showingFilmsCounthis._showingFilmsCount));
+    
+    this._listFilmsStandardContainerElement = listFilmsStandardElement.querySelector(`.films-list__container`);
+    const newFilms = renderFilms(this._listFilmsStandardContainerElement, this._films.slice(0, this._showingFilmsCount), this._onDataChange);
     this._showedFilmsControllers = this._showedFilmsControllers.concat(newFilms);
 
-    this._renderButtonShowMoreComponent(listFilmsStandardContainerElement);
+    this._renderButtonShowMoreComponent(this._listFilmsStandardContainerElement);
 
     const listFilmsExtraElements = filmsBlock.querySelectorAll(`.films-list--extra`);
     listFilmsExtraElements.forEach((it) => {
       const listFilmsExtraContainerElements = it.querySelector(`.films-list__container`);
       const filmsExtra = generateFilms(2);
-      renderFilms(listFilmsExtraContainerElements, filmsExtra);
+      renderFilms(listFilmsExtraContainerElements, filmsExtra, this._onDataChange);
     });
   }
 
@@ -92,7 +95,7 @@ export default class PageController {
       const prevFilmsCount = this._showingFilmsCount;
       this._showingFilmsCount = this._showingFilmsCount + SHOWING_FILMS_COUNT_BY_BUTTON;
 
-      renderFilms(containerElement, films.slice(prevFilmsCount, this._showingFilmsCount));
+      renderFilms(containerElement, this._films.slice(prevFilmsCount, this._showingFilmsCount), this._onDataChange);
 
       if (this._showingFilmsCount >= this._films.length) {
         remove(this._buttonShowMoreComponent);
@@ -104,18 +107,30 @@ export default class PageController {
     let sortedFilms = [];
     switch (sortType) {
       case SortType.DATE:
-        sortedFilms = films.slice().sort((a, b) => a.releaseDate - b.releaseDate);
+        sortedFilms = this._films.slice().sort((a, b) => a.releaseDate - b.releaseDate);
         break;
       case SortType.RAITING:
-        sortedFilms = films.slice().sort((a, b) => a.raiting - b.raiting);
+        sortedFilms = this._films.slice().sort((a, b) => a.raiting - b.raiting);
         break;
       case SortType.DEFAULT:
-        sortedFilms = films.slice();
+        sortedFilms = this._films.slice();
         break;
     }
-    listFilmsStandardContainerElement.innerHTML = ``;
-    renderFilms(listFilmsStandardContainerElement, sortedFilms.slice(0, this._showingFilmsCount));
+    this._listFilmsStandardContainerElement.innerHTML = ``;
+    renderFilms(this._listFilmsStandardContainerElement, sortedFilms.slice(0, this._showingFilmsCount), this._onDataChange);
     
   }
 
+  _onDataChange(filmController, oldData, newData) {
+    const index = this._films.findIndex((it) => it === oldData);
+
+    if (index === -1) {
+      return;
+    }
+
+    this._films = [].concat(this._films.slice(0, index), newData, this._films.slice(index + 1));
+
+    filmController.render(this._films[index]);
+
+  }
 }

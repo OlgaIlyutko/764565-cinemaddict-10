@@ -144,7 +144,7 @@ const createFilmDetailsTemplate = (filmInfo) => {
   );
 };
 
-export default class FilmDetails extends AbstractComponent {
+export default class FilmDetails extends AbstractSmartComponent {
   constructor(film) {
     super();
     this._film = film;
@@ -156,5 +156,24 @@ export default class FilmDetails extends AbstractComponent {
   setCloseButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
+  }
+
+  setToWatchlistClickHandler(handler) {
+    this.getElement().querySelector(`#watchlist`)
+    .addEventListener(`click`, handler);
+  }
+
+  setWatchedClickHandler(handler) {
+    this.getElement().querySelector(`#watched`)
+    .addEventListener(`click`, handler);
+  }
+
+  setToFavoritesClickHandler(handler) {
+    this.getElement().querySelector(`#favorite`)
+    .addEventListener(`click`, handler);
+  }
+
+  recoveryListeners() {
+    
   }
 }
