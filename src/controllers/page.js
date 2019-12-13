@@ -12,18 +12,17 @@ import MovieController from './movei';
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
 
-const renderFilms = (containerElement, films, onDataChange) => {
+const renderFilms = (containerElement, films, onDataChange, onViewChange) => {
   return films.map((film) => {
-    const filmController = new MovieController(containerElement, onDataChange);
+    const filmController = new MovieController(containerElement, onDataChange, onViewChange);
     filmController.render(film);
 
-    return MovieController;
+    return filmController;
   });
 };
 
 export default class PageController {
   constructor(container) {
-    let _container =blalba;
     this._container = container;
 
     this._films = [];
@@ -43,12 +42,12 @@ export default class PageController {
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
 
     this._onDataChange = this._onDataChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
   render(films) {
     this._films = films;
-    //const container = this._container.getElement();
     const container = this._container;
 
     render(container, this._filterComponent, RenderPosition.BEFOREEND);
@@ -67,12 +66,13 @@ export default class PageController {
       render(listFilmsStandardElement, this._noFilmsComponent, RenderPosition.BEFOREEND);
       return;
     }
-    
+
     render(filmsBlock, this._listFilmsExtraTopRatedComponent, RenderPosition.BEFOREEND);
     render(filmsBlock, this._listFilmsExtraMostCommentedComponent, RenderPosition.BEFOREEND);
-    
+
     this._listFilmsStandardContainerElement = listFilmsStandardElement.querySelector(`.films-list__container`);
-    const newFilms = renderFilms(this._listFilmsStandardContainerElement, this._films.slice(0, this._showingFilmsCount), this._onDataChange);
+
+    const newFilms = renderFilms(this._listFilmsStandardContainerElement, this._films.slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange);
     this._showedFilmsControllers = this._showedFilmsControllers.concat(newFilms);
 
     this._renderButtonShowMoreComponent(this._listFilmsStandardContainerElement);
@@ -81,7 +81,7 @@ export default class PageController {
     listFilmsExtraElements.forEach((it) => {
       const listFilmsExtraContainerElements = it.querySelector(`.films-list__container`);
       const filmsExtra = generateFilms(2);
-      renderFilms(listFilmsExtraContainerElements, filmsExtra, this._onDataChange);
+      renderFilms(listFilmsExtraContainerElements, filmsExtra, this._onDataChange, this._onViewChange);
     });
   }
 
@@ -95,7 +95,8 @@ export default class PageController {
       const prevFilmsCount = this._showingFilmsCount;
       this._showingFilmsCount = this._showingFilmsCount + SHOWING_FILMS_COUNT_BY_BUTTON;
 
-      renderFilms(containerElement, this._films.slice(prevFilmsCount, this._showingFilmsCount), this._onDataChange);
+      const newFilms = renderFilms(containerElement, this._films.slice(prevFilmsCount, this._showingFilmsCount), this._onDataChange, this._onViewChange);
+      this._showedFilmsControllers = this._showedFilmsControllers.concat(newFilms);
 
       if (this._showingFilmsCount >= this._films.length) {
         remove(this._buttonShowMoreComponent);
@@ -103,7 +104,7 @@ export default class PageController {
     });
   }
 
-  _onSortTypeChange(SortType) {
+  _onSortTypeChange(sortType) {
     let sortedFilms = [];
     switch (sortType) {
       case SortType.DATE:
@@ -117,8 +118,8 @@ export default class PageController {
         break;
     }
     this._listFilmsStandardContainerElement.innerHTML = ``;
-    renderFilms(this._listFilmsStandardContainerElement, sortedFilms.slice(0, this._showingFilmsCount), this._onDataChange);
-    
+    renderFilms(this._listFilmsStandardContainerElement, sortedFilms.slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange);
+
   }
 
   _onDataChange(filmController, oldData, newData) {
@@ -127,10 +128,12 @@ export default class PageController {
     if (index === -1) {
       return;
     }
-
     this._films = [].concat(this._films.slice(0, index), newData, this._films.slice(index + 1));
 
     filmController.render(this._films[index]);
+  }
 
+  _onViewChange() {
+    this._showedFilmsControllers.forEach((it) => it.setDefaultView());
   }
 }
