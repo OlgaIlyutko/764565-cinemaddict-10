@@ -220,25 +220,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     }, this._addToWachist);
   }
 
-  setCloseButtonClickHandler(handler) {
-    this.getElement().querySelector(`.film-details__close-btn`)
-      .addEventListener(`click`, handler);
-  }
-
-  setWatchedClickHandler(handler) {
-    this.getElement().querySelector(`#watched`)
-    .addEventListener(`click`, handler);
-  }
-
-  setToFavoritesClickHandler(handler) {
-    this.getElement().querySelector(`#favorite`)
-    .addEventListener(`click`, handler);
-  }
-
-  recoveryListeners() {
-    this._subscribeOnEvents();
-  }
-
   rerender() {
     super.rerender();
   }
