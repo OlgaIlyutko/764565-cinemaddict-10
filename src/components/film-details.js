@@ -220,8 +220,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     }, this._addToWachist);
   }
 
-<<<<<<< Updated upstream
-=======
   setCloseButtonClickHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
@@ -231,7 +229,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._subscribeOnEvents();
   }
 
->>>>>>> Stashed changes
   rerender() {
     super.rerender();
   }
