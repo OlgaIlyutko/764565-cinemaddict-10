@@ -208,7 +208,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._isWatched = film.isWatched;
     this._isFavorite = film.isFavorite;
 
-    this._addToWachist = false;
+    this._addToWachist = this._isWatched;
 
     this._subscribeOnEvents();
   }
@@ -220,6 +220,18 @@ export default class FilmDetails extends AbstractSmartComponent {
     }, this._addToWachist);
   }
 
+<<<<<<< Updated upstream
+=======
+  setCloseButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, handler);
+  }
+
+  recoveryListeners() {
+    this._subscribeOnEvents();
+  }
+
+>>>>>>> Stashed changes
   rerender() {
     super.rerender();
   }
