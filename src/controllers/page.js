@@ -7,7 +7,7 @@ import FilterComponent from '../components/filter';
 import SortComponent, {SortType} from '../components/sort';
 import {generateFilms} from '../mock/card-film';
 import {render, remove, RenderPosition} from '../utils/render.js';
-import MovieController from './movei';
+import MovieController from './movie';
 
 const SHOWING_FILMS_COUNT_ON_START = 5;
 const SHOWING_FILMS_COUNT_BY_BUTTON = 5;
@@ -39,8 +39,8 @@ export default class PageController {
     this._buttonShowMoreComponent = new ButtonShowMoreComponent();
 
     this._listFilmsStandardContainerElement = this._listFilmsStandardComponent.getElement().querySelector(`.films-list__container`);
-    this._onSortTypeChange = this._onSortTypeChange.bind(this);
 
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
@@ -74,6 +74,7 @@ export default class PageController {
 
     const newFilms = renderFilms(this._listFilmsStandardContainerElement, this._films.slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange);
     this._showedFilmsControllers = this._showedFilmsControllers.concat(newFilms);
+    //this._showedFilmsControllers = renderFilms(this._listFilmsStandardContainerElement, )
 
     this._renderButtonShowMoreComponent(this._listFilmsStandardContainerElement);
 
@@ -119,7 +120,6 @@ export default class PageController {
     }
     this._listFilmsStandardContainerElement.innerHTML = ``;
     renderFilms(this._listFilmsStandardContainerElement, sortedFilms.slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange);
-
   }
 
   _onDataChange(filmController, oldData, newData) {
@@ -129,6 +129,7 @@ export default class PageController {
       return;
     }
     this._films = [].concat(this._films.slice(0, index), newData, this._films.slice(index + 1));
+    //this._films[index] = newData;
 
     filmController.render(this._films[index]);
   }

@@ -4,7 +4,7 @@ import {render, replace, RenderPosition} from '../utils/render.js';
 
 const Mode = {
   DEFAULT: `default`,
-  POPAP: `popap`,
+  POPUP: `popup`
 };
 
 export default class MovieController {
@@ -21,6 +21,12 @@ export default class MovieController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
+  _toWachlistClickHandler(film) {
+    this._onDataChange(this, film, Object.assign({}, film, {
+      isWatchlist: !film.isWatchlist,
+    }));
+  }
+
   render(film) {
     const oldCardFilmComponent = this._cardFilmComponent;
     const oldFilmDetailsComponent = this._filmDetailsComponent;
@@ -28,30 +34,14 @@ export default class MovieController {
     this._cardFilmComponent = new CardFilmComponent(film);
     this._filmDetailsComponent = new FilmDetailsComponent(film);
 
-    this._cardFilmComponent.setImgClickHandler(() => this._filmPopapOpen());
-    this._cardFilmComponent.setTitleClickHandler(() => this._filmPopapOpen());
-    this._cardFilmComponent.setCommentsClickHandler(() => this._filmPopapOpen());
+    this._cardFilmComponent.setImgClickHandler(() => this._filmPopupOpen());
+    this._cardFilmComponent.setTitleClickHandler(() => this._filmPopupOpen());
+    this._cardFilmComponent.setCommentsClickHandler(() => this._filmPopupOpen());
 
-    this._filmDetailsComponent.setCloseButtonClickHandler(() => this._filmPopapClose());
+    this._filmDetailsComponent.setCloseButtonClickHandler(() => this._filmPopupClose());
 
-    this._cardFilmComponent.setToWatchlistClickHandler(() => {
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isWatchlist: !film.isWatchlist,
-      }));
-    });
-
-    this._cardFilmComponent.setWatchedClickHandler(() => {
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isWatched: !film.isWatched,
-      }));
-
-    });
-
-    this._cardFilmComponent.setToFavoritesClickHandler(() => {
-      this._onDataChange(this, film, Object.assign({}, film, {
-        isFavorite: !film.isFavorite,
-      }));
-    });
+    this._cardFilmComponent.setToWatchlistClickHandler(this._toWachlistClickHandler.bind(this, film));
+    this._filmDetailsComponent.setToWachlistClickHandler(this._toWachlistClickHandler.bind(this, film));
 
     if (oldFilmDetailsComponent && oldCardFilmComponent) {
       replace(this._cardFilmComponent, oldCardFilmComponent);
@@ -61,7 +51,7 @@ export default class MovieController {
     }
   }
 
-  _filmPopapOpen() {
+  _filmPopupOpen() {
     this._onViewChange();
     const siteFooterElement = document.querySelector(`footer`);
     render(siteFooterElement, this._filmDetailsComponent, RenderPosition.BEFOREEND);
@@ -69,7 +59,7 @@ export default class MovieController {
     this._mode = Mode.POPAP;
   }
 
-  _filmPopapClose() {
+  _filmPopupClose() {
     this._filmDetailsComponent.getElement().remove();
     this._mode = Mode.DEFAULT;
   }
@@ -78,14 +68,14 @@ export default class MovieController {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
-      this._filmPopapClose();
+      this._filmPopupClose();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }
 
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._filmPopapClose();
+      this._filmPopupClose();
     }
   }
 

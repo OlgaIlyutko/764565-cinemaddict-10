@@ -210,7 +210,8 @@ export default class FilmDetails extends AbstractSmartComponent {
 
     this._addToWachist = this._isWatched;
 
-    this._subscribeOnEvents();
+    //this._subscribeOnEvents();
+    this.recoveryListeners();
   }
   getTemplate() {
     return createFilmDetailsTemplate(this._film, {
@@ -221,25 +222,42 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   setCloseButtonClickHandler(handler) {
-    this.getElement().querySelector(`.film-details__close-btn`)
-      .addEventListener(`click`, handler);
+    /*this.getElement().querySelector(`.film-details__close-btn`)
+      //.addEventListener(`click`, handler);*/
+    this._closeButtonHandler = handler;
+  }
+
+  setToWachlistClickHandler(handler) {
+    console.log(`pop2`);
+    this._toWachlistClickHandler = handler;
+  }
+
+  setWachedClickHandler(handler) {
+    this._wachedClickHandler = handler;
+  }
+
+  setToFavoritesClickHandler(handler) {
+    this._toFavoritesClickHandler = handler;
   }
 
   recoveryListeners() {
-    this._subscribeOnEvents();
+/* this._subscribeOnEvents();
   }
 
   rerender() {
     super.rerender();
   }
 
-  _subscribeOnEvents() {
+  _subscribeOnEvents() {*/
     const element = this.getElement();
 
     element.querySelector(`#watchlist`)
       .addEventListener(`click`, () => {
+        console.log(`pop`);
         this._isWatchlist = !this._isWatchlist;
-
+        if (this._toWachlistClickHandler) {
+          this._toWachlistClickHandler();
+        }
         this.rerender();
       });
 
@@ -247,13 +265,18 @@ export default class FilmDetails extends AbstractSmartComponent {
       .addEventListener(`click`, () => {
         this._isWatched = !this._isWatched;
         this._addToWachist = !this._addToWachist;
+        if (this._wachedClickHandler) {
+          this._wachedClickHandler();
+        }
         this.rerender();
       });
 
     element.querySelector(`#favorite`)
       .addEventListener(`click`, () => {
         this._isFavorite = !this._isFavorite;
-
+        if (this._toFavoritesClickHandler) {
+          this._toFavoritesClickHandler();
+        }
         this.rerender();
       });
 

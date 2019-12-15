@@ -1,4 +1,5 @@
-import AbstractComponent from './abstract-component';
+import AbstractComponent from '../components/abstract-component';
+//import {getFormattedDuration} from '../utils/formatting';
 
 const createCardFilmTemplate = (film) => {
   const {poster, title, raiting, releaseDate, duration, genres, description, isWatchlist, isWatched, isFavorite, comments} = film;
@@ -70,5 +71,4 @@ export default class CardFilm extends AbstractComponent {
     this.getElement().querySelector(`.film-card__controls-item--favorite`)
     .addEventListener(`click`, handler);
   }
-
 }
