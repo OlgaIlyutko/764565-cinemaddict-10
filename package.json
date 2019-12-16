@@ -9,10 +9,13 @@
     "start": "webpack-dev-server --open",
     "test": "npm run eslint"
   },
+  "dependencies": {
+    "moment": "2.24.0"
+  },
   "devDependencies": {
-    "eslint": "6.1.0",
+    "eslint": "6.7.2",
     "eslint-config-htmlacademy": "0.5.2",
-    "webpack": "4.41.2",
+    "webpack": "4.41.3",
     "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.9.0"
   },
