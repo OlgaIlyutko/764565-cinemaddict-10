@@ -1,14 +1,34 @@
-const filterNames = [
-  `watchlist`, `history`, `favorites`, `stats`
-];
+const getWatchlistCount = (films) => {
+  const watchlistCountFilms = films.filter((it) => it.isWatchlist);
+  return watchlistCountFilms.length;
+};
 
-const generateFilters = () => {
-  return filterNames.map((it) => {
-    return {
-      name: it,
-      count: Math.floor(Math.random() * 10),
-    };
-  });
+const getHistoryCount = (films) => {
+  const historyCountFilms = films.filter((it) => it.isWatched);
+  return historyCountFilms.length;
+};
+
+const getFavoritesCount = (films) => {
+  const favoritesCountFilms = films.filter((it) => it.isFavorite);
+  return favoritesCountFilms.length;
+};
+
+const generateFilters = (films) => {
+  const result = [
+    {
+      name: `watchlist`,
+      count: getWatchlistCount(films)
+    },
+    {
+      name: `history`,
+      count: getHistoryCount(films)
+    },
+    {
+      name: `favorites`,
+      count: getFavoritesCount(films)
+    }
+  ];
+  return result;
 };
 
 export {generateFilters};

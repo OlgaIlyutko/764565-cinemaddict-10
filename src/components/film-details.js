@@ -1,16 +1,10 @@
-import {getFormatedDate} from '../utils/formatting';
+import {getFormatedDate, getFormattedDuration} from '../utils/formatting';
 import AbstractSmartComponent from './abstract-smart-component';
 
 const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
   const {poster, ageLimit, title, raiting, director, wtiters, actors, releaseDate, duration, country, genres, description, comments} = filmInfo;
   const {isWatchlist, isWatched, isFavorite} = options;
 
-  const formatedDuration = (durationMinutes) => {
-    let durationFormating = ``;
-    durationFormating += (durationMinutes >= 60) ? `${Math.floor(durationMinutes / 60)}h` : ``;
-    durationFormating += (durationMinutes % 60 !== 0) ? ` ${durationMinutes % 60}min` : ``;
-    return durationFormating;
-  };
   const getGenres = genres.map((it) => `<span class="film-details__genre">${it}</span>`).join(``);
   const generateRaitingBlock = () => {
     return (
@@ -124,7 +118,7 @@ const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
-            <td class="film-details__cell">${formatedDuration(duration)}</td>
+            <td class="film-details__cell">${getFormattedDuration(duration)}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
@@ -210,7 +204,6 @@ export default class FilmDetails extends AbstractSmartComponent {
 
     this._addToWachist = this._isWatched;
 
-    //this._subscribeOnEvents();
     this.recoveryListeners();
   }
   getTemplate() {
@@ -222,18 +215,15 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   setCloseButtonClickHandler(handler) {
-    /*this.getElement().querySelector(`.film-details__close-btn`)
-      //.addEventListener(`click`, handler);*/
     this._closeButtonHandler = handler;
   }
 
-  setToWachlistClickHandler(handler) {
-    console.log(`pop2`);
-    this._toWachlistClickHandler = handler;
+  setToWatchlistClickHandler(handler) {
+    this._toWatchlistClickHandler = handler;
   }
 
-  setWachedClickHandler(handler) {
-    this._wachedClickHandler = handler;
+  setWatchedClickHandler(handler) {
+    this._watchedClickHandler = handler;
   }
 
   setToFavoritesClickHandler(handler) {
@@ -241,22 +231,13 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   recoveryListeners() {
-/* this._subscribeOnEvents();
-  }
-
-  rerender() {
-    super.rerender();
-  }
-
-  _subscribeOnEvents() {*/
     const element = this.getElement();
 
     element.querySelector(`#watchlist`)
       .addEventListener(`click`, () => {
-        console.log(`pop`);
         this._isWatchlist = !this._isWatchlist;
-        if (this._toWachlistClickHandler) {
-          this._toWachlistClickHandler();
+        if (this._toWatchlistClickHandler) {
+          this._toWatchlistClickHandler();
         }
         this.rerender();
       });
@@ -265,8 +246,8 @@ export default class FilmDetails extends AbstractSmartComponent {
       .addEventListener(`click`, () => {
         this._isWatched = !this._isWatched;
         this._addToWachist = !this._addToWachist;
-        if (this._wachedClickHandler) {
-          this._wachedClickHandler();
+        if (this._watchedClickHandler) {
+          this._watchedClickHandler();
         }
         this.rerender();
       });
@@ -285,4 +266,17 @@ export default class FilmDetails extends AbstractSmartComponent {
         element.remove();
       });
   }
+
+  setEmojiCommentHandler(handler) {
+    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      if (evt.target.tagName !== `IMG`) {
+        return;
+      }
+      const emojiCurrent = evt.target;
+      handler(emojiCurrent.cloneNode(false));
+    });
+  }
+
 }

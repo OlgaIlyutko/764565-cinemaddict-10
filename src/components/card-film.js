@@ -1,16 +1,10 @@
 import AbstractComponent from '../components/abstract-component';
-//import {getFormattedDuration} from '../utils/formatting';
+import {getFormattedDuration} from '../utils/formatting';
 
 const createCardFilmTemplate = (film) => {
   const {poster, title, raiting, releaseDate, duration, genres, description, isWatchlist, isWatched, isFavorite, comments} = film;
   const controlClass = (controlName) => {
     return controlName ? ` film-card__controls-item--active` : ``;
-  };
-  const formatedDuration = (durationMinutes) => {
-    let durationFormating = ``;
-    durationFormating += (durationMinutes >= 60) ? `${Math.floor(durationMinutes / 60)}h` : ``;
-    durationFormating += (durationMinutes % 60 !== 0) ? ` ${durationMinutes % 60}min` : ``;
-    return durationFormating;
   };
   return (
     `<article class="film-card">
@@ -18,7 +12,7 @@ const createCardFilmTemplate = (film) => {
       <p class="film-card__rating">${raiting}</p>
       <p class="film-card__info">
       <span class="film-card__year">${releaseDate.getFullYear()}</span>
-      <span class="film-card__duration">${formatedDuration(duration)}</span>
+      <span class="film-card__duration">${getFormattedDuration(duration)}</span>
       <span class="film-card__genre">${genres[0]}</span>
       </p>
       <img src="./images/posters/${poster}" alt="" class="film-card__poster">
