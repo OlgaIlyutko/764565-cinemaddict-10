@@ -1,16 +1,10 @@
-import {getFormatedDate} from '../utils/formatting';
+import {getFormatedDate, getFormattedDuration} from '../utils/formatting';
 import AbstractSmartComponent from './abstract-smart-component';
 
 const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
   const {poster, ageLimit, title, raiting, director, wtiters, actors, releaseDate, duration, country, genres, description, comments} = filmInfo;
   const {isWatchlist, isWatched, isFavorite} = options;
 
-  const formatedDuration = (durationMinutes) => {
-    let durationFormating = ``;
-    durationFormating += (durationMinutes >= 60) ? `${Math.floor(durationMinutes / 60)}h` : ``;
-    durationFormating += (durationMinutes % 60 !== 0) ? ` ${durationMinutes % 60}min` : ``;
-    return durationFormating;
-  };
   const getGenres = genres.map((it) => `<span class="film-details__genre">${it}</span>`).join(``);
   const generateRaitingBlock = () => {
     return (
@@ -124,7 +118,7 @@ const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
-            <td class="film-details__cell">${formatedDuration(duration)}</td>
+            <td class="film-details__cell">${getFormattedDuration(duration)}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
@@ -208,9 +202,9 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._isWatched = film.isWatched;
     this._isFavorite = film.isFavorite;
 
-    this._addToWachist = false;
+    this._addToWachist = this._isWatched;
 
-    this._subscribeOnEvents();
+    this.recoveryListeners();
   }
   getTemplate() {
     return createFilmDetailsTemplate(this._film, {
@@ -221,35 +215,30 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   setCloseButtonClickHandler(handler) {
-    this.getElement().querySelector(`.film-details__close-btn`)
-      .addEventListener(`click`, handler);
+    this._closeButtonHandler = handler;
+  }
+
+  setToWatchlistClickHandler(handler) {
+    this._toWatchlistClickHandler = handler;
   }
 
   setWatchedClickHandler(handler) {
-    this.getElement().querySelector(`#watched`)
-    .addEventListener(`click`, handler);
+    this._watchedClickHandler = handler;
   }
 
   setToFavoritesClickHandler(handler) {
-    this.getElement().querySelector(`#favorite`)
-    .addEventListener(`click`, handler);
+    this._toFavoritesClickHandler = handler;
   }
 
   recoveryListeners() {
-    this._subscribeOnEvents();
-  }
-
-  rerender() {
-    super.rerender();
-  }
-
-  _subscribeOnEvents() {
     const element = this.getElement();
 
     element.querySelector(`#watchlist`)
       .addEventListener(`click`, () => {
         this._isWatchlist = !this._isWatchlist;
-
+        if (this._toWatchlistClickHandler) {
+          this._toWatchlistClickHandler();
+        }
         this.rerender();
       });
 
@@ -257,13 +246,18 @@ export default class FilmDetails extends AbstractSmartComponent {
       .addEventListener(`click`, () => {
         this._isWatched = !this._isWatched;
         this._addToWachist = !this._addToWachist;
+        if (this._watchedClickHandler) {
+          this._watchedClickHandler();
+        }
         this.rerender();
       });
 
     element.querySelector(`#favorite`)
       .addEventListener(`click`, () => {
         this._isFavorite = !this._isFavorite;
-
+        if (this._toFavoritesClickHandler) {
+          this._toFavoritesClickHandler();
+        }
         this.rerender();
       });
 
@@ -272,4 +266,17 @@ export default class FilmDetails extends AbstractSmartComponent {
         element.remove();
       });
   }
+
+  setEmojiCommentHandler(handler) {
+    this.getElement().querySelector(`.film-details__emoji-list`).addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      if (evt.target.tagName !== `IMG`) {
+        return;
+      }
+      const emojiCurrent = evt.target;
+      handler(emojiCurrent.cloneNode(false));
+    });
+  }
+
 }

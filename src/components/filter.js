@@ -2,13 +2,14 @@ import {uppercaseFirst} from '../utils/formatting';
 import AbstractComponent from './abstract-component';
 import {generateFilters} from '../mock/filter';
 
-const createFilterTemplate = () => {
-  const filters = generateFilters();
+const createFilterTemplate = (films) => {
+  const filters = generateFilters(films);
   const filtersMarkup = filters.map((it) => createFilterMarkup(it)).join(``);
   return (
     `<nav class="main-navigation">
       <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
       ${filtersMarkup}
+      <a href="#stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
     </nav>`
   );
 };
@@ -19,7 +20,11 @@ const createFilterMarkup = (filter) => {
 };
 
 export default class Filter extends AbstractComponent {
+  constructor(films) {
+    super();
+    this._films = films;
+  }
   getTemplate() {
-    return createFilterTemplate();
+    return createFilterTemplate(this._films);
   }
 }

@@ -69,7 +69,7 @@ const getRandomDescription = () => {
 };
 
 const getRandomComments = () => {
-  const commentsCount = getRandomInt(1, 10);
+  const commentsCount = getRandomInt(0, 12);
   return Array.from({length: commentsCount}, () => {
     return {
       img: getRandomArrayItem(EMOJI),
