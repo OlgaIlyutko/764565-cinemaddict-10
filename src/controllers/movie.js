@@ -72,11 +72,13 @@ export default class MovieController {
     this._filmDetailsComponent.setToFavoritesClickHandler(this._toFavoritesClickHandler.bind(this, film));
 
     this._filmDetailsComponent.setEmojiCommentHandler(this._emojiCommentHandler.bind(this));
+    this._filmDetailsComponent.setCommentDeleteHandler(this._onDataChange.bind(this, this, film, null));
 
 
     if (oldFilmDetailsComponent && oldCardFilmComponent) {
       replace(this._cardFilmComponent, oldCardFilmComponent);
       replace(this._filmDetailsComponent, oldFilmDetailsComponent);
+      
     } else {
       render(this._container, this._cardFilmComponent, RenderPosition.BEFOREEND);
     }
@@ -91,6 +93,7 @@ export default class MovieController {
   }
 
   _filmPopupClose() {
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._filmDetailsComponent.getElement().remove();
     this._mode = Mode.DEFAULT;
   }

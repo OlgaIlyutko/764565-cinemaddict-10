@@ -58,7 +58,6 @@ export default class PageController {
 
     const container = this._container;
 
-    //render(container, new FilterComponent(films), RenderPosition.BEFOREEND);
     render(container, this._sortComponent, RenderPosition.BEFOREEND);
     render(container, this._filmsBlockComponent, RenderPosition.BEFOREEND);
 
@@ -77,8 +76,6 @@ export default class PageController {
 
     render(filmsBlock, this._listFilmsExtraTopRatedComponent, RenderPosition.BEFOREEND);
     render(filmsBlock, this._listFilmsExtraMostCommentedComponent, RenderPosition.BEFOREEND);
-
-    //this._listFilmsStandardContainerElement = listFilmsStandardElement.querySelector(`.films-list__container`);
   
     this._showedFilmsControllers = renderFilms(this._listFilmsStandardContainerElement, films.slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange);
 
@@ -94,9 +91,7 @@ export default class PageController {
 
   }
 
-  _renderButtonShowMoreComponent() {
- 
-  
+  _renderButtonShowMoreComponent() {    
     if (this._showingFilmsCount >= this._filmsModel.getFilms().length) {
       return;
     }
@@ -135,11 +130,19 @@ export default class PageController {
   }
 
   _onDataChange(filmController, oldData, newData) {
-    const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
-   
-    if (isSuccess) {
-      filmController.render(newData);
-    }
+    
+    if (newData === null) {
+
+      this._filmsModel.deleteComment(oldData.id);
+
+    } else {
+      const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
+      
+      if (isSuccess) {
+        filmController.render(newData);
+        this._onFilterChange()
+      }
+    
   }
 
   _onViewChange() {

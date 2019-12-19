@@ -27,6 +27,16 @@ export default class Movies {
     this._filterChangeHandlers.forEach((handler) => handler());
   }
 
+  deleteComment(id, numberComment) {
+    const index = this._films.findIndex((it) => it.id === id);
+
+    if (index === -1) {
+      return false;
+    }
+    
+    this._films[index].comments.splice(numberComment, 1);    
+  }
+
   updateFilm(id, film) {
     const index = this._films.findIndex((it) => it.id === id);
 

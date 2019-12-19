@@ -202,6 +202,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._isWatched = film.isWatched;
     this._isFavorite = film.isFavorite;
 
+    this._deleteCommentClickHandler = null;
+
     this._addToWachist = this._isWatched;
 
     this.recoveryListeners();
@@ -277,6 +279,33 @@ export default class FilmDetails extends AbstractSmartComponent {
       const emojiCurrent = evt.target;
       handler(emojiCurrent.cloneNode(false));
     });
+  }
+
+  setCommentDeleteHandler(handler) {
+    this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      if (evt.target.tagName !== `BUTTON`) {
+        return;
+      }
+      
+      let currentCommentButton = evt.target;
+
+      while (currentCommentButton.tagName !== 'LI') {
+        currentCommentButton = currentCommentButton.parentNode;
+      }
+
+      const commentId = currentCommentButton.querySelector(`.film-details__comment-day`);
+      console.log(commentId);
+      currentCommentButton.remove();
+        
+
+      handler();
+
+     // this._deleteCommentClickHandler = handler;
+      
+    });
+    
   }
 
 }

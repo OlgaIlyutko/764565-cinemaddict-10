@@ -37,7 +37,6 @@ export default class Filter extends AbstractComponent {
       const filterButton = document.querySelectorAll(`.main-navigation__item `);
 
       const currentfilterButton = Array.from(filterButton).find((it) => {
-        console.log(it);
         return it.classList.contains(`main-navigation__item--active`);
       });
       currentfilterButton.classList.remove(`main-navigation__item--active`);
