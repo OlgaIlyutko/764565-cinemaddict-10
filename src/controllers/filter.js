@@ -16,7 +16,7 @@ export default class FilterController {
 
     this._filmsModel.setDataChangeHandler(this._onDataChange);
   }
-  
+
   render() {
     const container = this._container;
     const allFilms = this._filmsModel.getFilmsAll();

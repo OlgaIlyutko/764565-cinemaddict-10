@@ -291,16 +291,16 @@ export default class FilmDetails extends AbstractSmartComponent {
       
       let currentCommentButton = evt.target;
 
-      while (currentCommentButton.tagName !== 'LI') {
+      while (currentCommentButton.tagName !== `LI`) {
         currentCommentButton = currentCommentButton.parentNode;
       }
 
       const commentId = currentCommentButton.querySelector(`.film-details__comment-day`);
-      console.log(commentId);
+      console.log(commentId.innerText);
       currentCommentButton.remove();
         
 
-      handler();
+      handler(commentId.innerText);
 
      // this._deleteCommentClickHandler = handler;
       

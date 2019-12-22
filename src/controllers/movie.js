@@ -20,6 +20,8 @@ export default class MovieController {
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
 
+    this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
+
   }
 
   _emojiCommentHandler(element) {
@@ -44,9 +46,30 @@ export default class MovieController {
   }
 
   _toFavoritesClickHandler(film) {
+    console.log(film);
     this._onDataChange(this, film, Object.assign({}, film, {
       isFavorite: !film.isFavorite,
     }));
+  }
+
+  _commentDeleteHandler(newComments) {
+    
+    /*console.log(newComments);
+    const allComments = this._filmDetailsComponent._film.comments;
+    console.log(allComments);
+    const deleteComments = allComments.find((it) => {
+      return it.commentDay === newComments;
+    });
+
+    const deleteCommentsIndex = allComments.indexOf(deleteComments);
+    console.log(deleteCommentsIndex);
+    let allNewComments = allComments.splice(deleteCommentsIndex, 1);
+    console.log(allNewComments);
+    const film = this._filmDetailsComponent._film;
+    /*this._onDataChange(this, film, Object.assign({}, film, {
+      comments: allNewComments,
+    }));
+    console.log(this._filmDetailsComponent._film.comments);*/
   }
 
   render(film) {
@@ -72,13 +95,13 @@ export default class MovieController {
     this._filmDetailsComponent.setToFavoritesClickHandler(this._toFavoritesClickHandler.bind(this, film));
 
     this._filmDetailsComponent.setEmojiCommentHandler(this._emojiCommentHandler.bind(this));
-    this._filmDetailsComponent.setCommentDeleteHandler(this._onDataChange.bind(this, this, film, null));
+    this._filmDetailsComponent.setCommentDeleteHandler(this._commentDeleteHandler);
 
 
     if (oldFilmDetailsComponent && oldCardFilmComponent) {
       replace(this._cardFilmComponent, oldCardFilmComponent);
       replace(this._filmDetailsComponent, oldFilmDetailsComponent);
-      
+   
     } else {
       render(this._container, this._cardFilmComponent, RenderPosition.BEFOREEND);
     }

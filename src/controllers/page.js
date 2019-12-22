@@ -130,19 +130,11 @@ export default class PageController {
   }
 
   _onDataChange(filmController, oldData, newData) {
-    
-    if (newData === null) {
-
-      this._filmsModel.deleteComment(oldData.id);
-
-    } else {
-      const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
-      
-      if (isSuccess) {
-        filmController.render(newData);
-        this._onFilterChange()
-      }
-    
+    const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
+    if (isSuccess) {
+      filmController.render(newData);
+      this._onFilterChange();
+    }
   }
 
   _onViewChange() {
