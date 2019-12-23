@@ -76,7 +76,7 @@ export default class PageController {
 
     render(filmsBlock, this._listFilmsExtraTopRatedComponent, RenderPosition.BEFOREEND);
     render(filmsBlock, this._listFilmsExtraMostCommentedComponent, RenderPosition.BEFOREEND);
-  
+
     this._showedFilmsControllers = renderFilms(this._listFilmsStandardContainerElement, films.slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange);
 
     this._renderButtonShowMoreComponent();
@@ -91,7 +91,7 @@ export default class PageController {
 
   }
 
-  _renderButtonShowMoreComponent() {    
+  _renderButtonShowMoreComponent() {
     if (this._showingFilmsCount >= this._filmsModel.getFilms().length) {
       return;
     }

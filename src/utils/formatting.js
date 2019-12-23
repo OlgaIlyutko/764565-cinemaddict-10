@@ -10,6 +10,10 @@ const getFormatedDateTime = function () {
   return moment(dateTime).format(`YYYY/MM/DD HH:MM`);
 };
 
+const formateDateTime = function (dateTime) {
+  return moment(dateTime).format(`YYYY/MM/DD HH:MM`);
+};
+
 const uppercaseFirst = (word) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 };
@@ -20,4 +24,4 @@ const getFormattedDuration = (durationMinutes) => {
   return `${(hours > 0) ? `${hours}h ` : ``}${minutes}min`;
 };
 
-export {getFormatedDate, getFormatedDateTime, uppercaseFirst, getFormattedDuration};
+export {getFormatedDate, getFormatedDateTime, uppercaseFirst, getFormattedDuration, formateDateTime};

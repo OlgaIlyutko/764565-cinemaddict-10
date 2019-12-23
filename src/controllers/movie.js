@@ -1,6 +1,7 @@
 import CardFilmComponent from '../components/card-film';
 import FilmDetailsComponent from '../components/film-details';
 import {render, replace, RenderPosition} from '../utils/render.js';
+import {formateDateTime} from '../utils/formatting';
 
 const Mode = {
   DEFAULT: `default`,
@@ -21,6 +22,7 @@ export default class MovieController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
 
     this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
+    this._commentAddHandler = this._commentAddHandler.bind(this);
 
   }
 
@@ -46,30 +48,33 @@ export default class MovieController {
   }
 
   _toFavoritesClickHandler(film) {
-    console.log(film);
     this._onDataChange(this, film, Object.assign({}, film, {
       isFavorite: !film.isFavorite,
     }));
   }
 
-  _commentDeleteHandler(newComments) {
-    
-    /*console.log(newComments);
-    const allComments = this._filmDetailsComponent._film.comments;
-    console.log(allComments);
+
+  _commentAddHandler(film) {
+    const allComments = film.comments;
+    const newComment = this._getNewComment();
+    allComments.push(newComment);
+
+    this._onDataChange(this, film, Object.assign({}, film, {
+      comments: allComments,
+    }));
+  }
+
+  _commentDeleteHandler(newComments, film) {
+    const allComments = film.comments;
     const deleteComments = allComments.find((it) => {
       return it.commentDay === newComments;
     });
-
     const deleteCommentsIndex = allComments.indexOf(deleteComments);
-    console.log(deleteCommentsIndex);
-    let allNewComments = allComments.splice(deleteCommentsIndex, 1);
-    console.log(allNewComments);
-    const film = this._filmDetailsComponent._film;
-    /*this._onDataChange(this, film, Object.assign({}, film, {
-      comments: allNewComments,
+    const allNewComments = allComments.splice(deleteCommentsIndex, 1);
+
+    this._onDataChange(this, film, Object.assign({}, film, {
+      comments: allComments,
     }));
-    console.log(this._filmDetailsComponent._film.comments);*/
   }
 
   render(film) {
@@ -95,13 +100,14 @@ export default class MovieController {
     this._filmDetailsComponent.setToFavoritesClickHandler(this._toFavoritesClickHandler.bind(this, film));
 
     this._filmDetailsComponent.setEmojiCommentHandler(this._emojiCommentHandler.bind(this));
-    this._filmDetailsComponent.setCommentDeleteHandler(this._commentDeleteHandler);
+    this._filmDetailsComponent.setCommentDeleteHandler(this._commentDeleteHandler, film);
 
+    this._filmDetailsComponent.setSubmitCommentHandler(this._commentAddHandler.bind(this, film));
 
     if (oldFilmDetailsComponent && oldCardFilmComponent) {
       replace(this._cardFilmComponent, oldCardFilmComponent);
       replace(this._filmDetailsComponent, oldFilmDetailsComponent);
-   
+
     } else {
       render(this._container, this._cardFilmComponent, RenderPosition.BEFOREEND);
     }
@@ -136,4 +142,20 @@ export default class MovieController {
     }
   }
 
+  _getNewComment() {
+    const getEmoji = () => {
+      const emoji = document.querySelector(`.film-details__add-emoji-label img`).src.split(`/`);
+      return emoji[emoji.length - 1];
+    };
+    const getText = () => {
+      const text = document.querySelector(`.film-details__comment-input`);
+      return text.value;
+    };
+    return {
+      img: getEmoji(),
+      commentText: getText(),
+      commentAuthor: `Olga`,
+      commentDay: formateDateTime(new Date())
+    };
+  }
 }

@@ -281,31 +281,76 @@ export default class FilmDetails extends AbstractSmartComponent {
     });
   }
 
-  setCommentDeleteHandler(handler) {
+  setCommentDeleteHandler(handler, film) {
+    console.log(this);
     this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
       if (evt.target.tagName !== `BUTTON`) {
         return;
       }
-      
+
       let currentCommentButton = evt.target;
 
       while (currentCommentButton.tagName !== `LI`) {
         currentCommentButton = currentCommentButton.parentNode;
       }
 
-      const commentId = currentCommentButton.querySelector(`.film-details__comment-day`);
-      console.log(commentId.innerText);
+      const commentIdElement = currentCommentButton.querySelector(`.film-details__comment-day`);
+      const commentId = commentIdElement.innerText;
       currentCommentButton.remove();
-        
 
-      handler(commentId.innerText);
+      handler(commentId, film);
+// this._deleteCommentClickHandler = handler;
 
-     // this._deleteCommentClickHandler = handler;
-      
     });
-    
   }
+
+  setSubmitCommentHandler(handler, film) {
+    let pressed = new Set();
+    this.getElement().querySelector(`form`).addEventListener(`keydown`, function (event) {
+      pressed.add(event.code);
+      const codes = [`ControlRight`, `Enter`];
+      for (let code of codes) {
+        if (!pressed.has(code)) {
+          return;
+        }
+      }
+      pressed.clear();
+
+      handler(film);
+    });
+
+    this.getElement().querySelector(`form`).addEventListener(`keyup`, function (event) {
+      pressed.delete(event.code);
+    });
+
+    /*runOnKeys(() => this, handler(film), "ControlRight", "Enter");
+
+    /*const _isEnter = false;
+    const _isCtrl = false;
+    this.getElement().querySelector(`form`)
+      .addEventListener(`keydown`, (evt) => {
+        if (evt.keyCode === 17) {
+          evt.preventDefault();
+          _isCtrl = !_isCtrl;
+        }
+      });
+
+    this.getElement().querySelector(`form`)
+      .addEventListener(`keyup`, (evt) => {
+        if (evt.keyCode === 17) {
+          evt.preventDefault();
+          _isEnter = !_isEnter;
+        }
+      });
+
+    if (_isEnter && _isCtrl) {
+      handler(film);
+    }*/
+
+    //this._submitCommentHandler = handler;
+  }
+
 
 }
