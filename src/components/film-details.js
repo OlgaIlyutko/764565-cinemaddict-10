@@ -285,7 +285,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     });
   }
 
-  setCommentDeleteHandler(handler, film) {
+  setCommentDeleteHandler(handler) {
     this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
@@ -303,11 +303,11 @@ export default class FilmDetails extends AbstractSmartComponent {
       const commentId = commentIdElement.innerText;
       currentCommentButton.remove();
 
-      handler(commentId, film);
+      handler(commentId);
     });
   }
 
-  setSubmitCommentHandler(handler, film) {
+  setSubmitCommentHandler(handler) {
     let pressed = new Set();
     this.getElement().querySelector(`form`).addEventListener(`keydown`, function (event) {
       pressed.add(event.keyCode);
@@ -319,7 +319,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       }
       pressed.clear();
 
-      handler(film);
+      handler();
     });
 
     this.getElement().querySelector(`form`).addEventListener(`keyup`, function (event) {

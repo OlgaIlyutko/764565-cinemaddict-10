@@ -20,10 +20,6 @@ export default class MovieController {
     this._onViewChange = onViewChange;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
-
-    this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
-    this._commentAddHandler = this._commentAddHandler.bind(this);
-
   }
 
   _emojiCommentHandler(element) {
@@ -64,7 +60,7 @@ export default class MovieController {
     }));
   }
 
-  _commentDeleteHandler(newComments, film) {
+  _commentDeleteHandler(film, newComments) {
     const allComments = film.comments;
     const deleteComments = allComments.find((it) => {
       return it.commentDay === newComments;
@@ -100,7 +96,7 @@ export default class MovieController {
     this._filmDetailsComponent.setToFavoritesClickHandler(this._toFavoritesClickHandler.bind(this, film));
 
     this._filmDetailsComponent.setEmojiCommentHandler(this._emojiCommentHandler.bind(this));
-    this._filmDetailsComponent.setCommentDeleteHandler(this._commentDeleteHandler, film);
+    this._filmDetailsComponent.setCommentDeleteHandler(this._commentDeleteHandler.bind(this, film));
 
     this._filmDetailsComponent.setSubmitCommentHandler(this._commentAddHandler.bind(this, film));
 
