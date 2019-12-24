@@ -13,16 +13,16 @@ export const getFavoritesCount = (films) => {
 };
 
 export const getFilmsByFilter = (films, filterType) => {
-    switch (filterType) {
-      case FilterType.ALL:
-        return films;
-      case FilterType.WATCHLIST:
-        return getWatchlistCount(films);
-      case FilterType.HISTORY:
-        return getHistoryCount(films);
-      case FilterType.FAVORITES:
-        return getFavoritesCount(films);
-    }
-  
-    return films;
-  };
+  switch (filterType) {
+    case FilterType.ALL:
+      return films;
+    case FilterType.WATCHLIST:
+      return getWatchlistCount(films);
+    case FilterType.HISTORY:
+      return getHistoryCount(films);
+    case FilterType.FAVORITES:
+      return getFavoritesCount(films);
+  }
+
+  return films;
+};

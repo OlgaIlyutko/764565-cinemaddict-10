@@ -70,7 +70,7 @@ export default class MovieController {
       return it.commentDay === newComments;
     });
     const deleteCommentsIndex = allComments.indexOf(deleteComments);
-    const allNewComments = allComments.splice(deleteCommentsIndex, 1);
+    allComments.splice(deleteCommentsIndex, 1);
 
     this._onDataChange(this, film, Object.assign({}, film, {
       comments: allComments,
@@ -143,12 +143,13 @@ export default class MovieController {
   }
 
   _getNewComment() {
+    const popapElement = this._filmDetailsComponent.getElement();
     const getEmoji = () => {
-      const emoji = document.querySelector(`.film-details__add-emoji-label img`).src.split(`/`);
+      const emoji = popapElement.querySelector(`.film-details__add-emoji-label img`).src.split(`/`);
       return emoji[emoji.length - 1];
     };
     const getText = () => {
-      const text = document.querySelector(`.film-details__comment-input`);
+      const text = popapElement.querySelector(`.film-details__comment-input`);
       return text.value;
     };
     return {

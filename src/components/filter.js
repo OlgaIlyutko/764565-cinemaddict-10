@@ -16,8 +16,6 @@ const createFilterTemplate = (filters) => {
   );
 };
 
-//<a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-
 const createFilterMarkup = (filter, isChecked) => {
   const {name, count} = filter;
   return `<a href="#${name}" class="main-navigation__item ${isChecked ? `main-navigation__item--active` : ``}">${uppercaseFirst(name)} <span class="main-navigation__item-count">${count}</span></a>`;
@@ -45,9 +43,9 @@ export default class Filter extends AbstractComponent {
 
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
-      const filterElement = evt.target.getAttribute('href');
+      const filterElement = evt.target.getAttribute(`href`);
       const filterName = getFilterNameByHREF(filterElement);
-      changeActiveClass(evt);   
+      changeActiveClass(evt);
 
       handler(filterName);
     });

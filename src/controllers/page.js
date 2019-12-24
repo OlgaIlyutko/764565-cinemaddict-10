@@ -3,7 +3,6 @@ import ListFilmsExtraComponent from '../components/list-films-extra';
 import ButtonShowMoreComponent from '../components/button-show-more';
 import NoFilmsComponent from '../components/no-films';
 import FilmsBlockComponent from '../components/films-block';
-import FilterComponent from '../components/filter';
 import SortComponent, {SortType} from '../components/sort';
 import {render, remove, RenderPosition} from '../utils/render.js';
 import MovieController from './movie';
@@ -25,7 +24,6 @@ export default class PageController {
     this._container = container;
     this._filmsModel = filmsModel;
 
-   
     this._defaultFilms = [];
     this._showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
     this._showedFilmsControllers = [];

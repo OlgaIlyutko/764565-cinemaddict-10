@@ -1,5 +1,9 @@
 import {getFormatedDate, getFormattedDuration} from '../utils/formatting';
 import AbstractSmartComponent from './abstract-smart-component';
+import he from 'he';
+
+const ENTER_KEYCODE = 13;
+const CTRL_KEYCODE = 17;
 
 const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
   const {poster, ageLimit, title, raiting, director, wtiters, actors, releaseDate, duration, country, genres, description, comments} = filmInfo;
@@ -65,7 +69,7 @@ const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
           <img src="./images/emoji/${it.img}" width="55" height="55" alt="emoji">
         </span>
         <div>
-          <p class="film-details__comment-text">${it.commentText}</p>
+          <p class="film-details__comment-text">${he.encode(it.commentText)}</p>
             <p class="film-details__comment-info">
             <span class="film-details__comment-author">${it.commentAuthor}</span>
             <span class="film-details__comment-day">${it.commentDay}</span>
@@ -282,7 +286,6 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   setCommentDeleteHandler(handler, film) {
-    console.log(this);
     this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
@@ -301,16 +304,14 @@ export default class FilmDetails extends AbstractSmartComponent {
       currentCommentButton.remove();
 
       handler(commentId, film);
-// this._deleteCommentClickHandler = handler;
-
     });
   }
 
   setSubmitCommentHandler(handler, film) {
     let pressed = new Set();
     this.getElement().querySelector(`form`).addEventListener(`keydown`, function (event) {
-      pressed.add(event.code);
-      const codes = [`ControlRight`, `Enter`];
+      pressed.add(event.keyCode);
+      const codes = [ENTER_KEYCODE, CTRL_KEYCODE];
       for (let code of codes) {
         if (!pressed.has(code)) {
           return;
@@ -322,35 +323,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     });
 
     this.getElement().querySelector(`form`).addEventListener(`keyup`, function (event) {
-      pressed.delete(event.code);
+      pressed.delete(event.keyCode);
     });
-
-    /*runOnKeys(() => this, handler(film), "ControlRight", "Enter");
-
-    /*const _isEnter = false;
-    const _isCtrl = false;
-    this.getElement().querySelector(`form`)
-      .addEventListener(`keydown`, (evt) => {
-        if (evt.keyCode === 17) {
-          evt.preventDefault();
-          _isCtrl = !_isCtrl;
-        }
-      });
-
-    this.getElement().querySelector(`form`)
-      .addEventListener(`keyup`, (evt) => {
-        if (evt.keyCode === 17) {
-          evt.preventDefault();
-          _isEnter = !_isEnter;
-        }
-      });
-
-    if (_isEnter && _isCtrl) {
-      handler(film);
-    }*/
-
-    //this._submitCommentHandler = handler;
   }
-
-
 }
