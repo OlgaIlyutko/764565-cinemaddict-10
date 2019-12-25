@@ -1,7 +1,6 @@
 import CardFilmComponent from '../components/card-film';
 import FilmDetailsComponent from '../components/film-details';
 import {render, replace, RenderPosition} from '../utils/render.js';
-import {formateDateTime} from '../utils/formatting';
 
 const Mode = {
   DEFAULT: `default`,
@@ -50,9 +49,8 @@ export default class MovieController {
   }
 
 
-  _commentAddHandler(film) {
+  _commentAddHandler(film, newComment) {
     const allComments = film.comments;
-    const newComment = this._getNewComment();
     allComments.push(newComment);
 
     this._onDataChange(this, film, Object.assign({}, film, {
@@ -60,10 +58,10 @@ export default class MovieController {
     }));
   }
 
-  _commentDeleteHandler(film, newComments) {
+  _commentDeleteHandler(film, delComments) {
     const allComments = film.comments;
     const deleteComments = allComments.find((it) => {
-      return it.commentDay === newComments;
+      return it.commentDay === delComments;
     });
     const deleteCommentsIndex = allComments.indexOf(deleteComments);
     allComments.splice(deleteCommentsIndex, 1);
@@ -138,12 +136,4 @@ export default class MovieController {
     }
   }
 
-  _getNewComment() {
-    return {
-      img: this._filmDetailsComponent.getNewCommentEmoji(),
-      commentText: this._filmDetailsComponent.getNewCommentText(),
-      commentAuthor: `Olga`,
-      commentDay: formateDateTime(new Date())
-    };
-  }
 }

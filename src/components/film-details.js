@@ -1,5 +1,6 @@
 import {getFormatedDate, getFormattedDuration} from '../utils/formatting';
 import AbstractSmartComponent from './abstract-smart-component';
+import {formateDateTime} from '../utils/formatting';
 import he from 'he';
 
 const ENTER_KEYCODE = 13;
@@ -220,16 +221,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     }, this._addToWachist);
   }
 
-  getNewCommentEmoji() {
-    const emoji = this.getElement().querySelector(`.film-details__add-emoji-label img`).src.split(`/`);
-    return emoji[emoji.length - 1];
-  }
-
-  getNewCommentText() {
-    const text = this.getElement().querySelector(`.film-details__comment-input`);
-    return text.value;
-  }
-
   setCloseButtonClickHandler(handler) {
     this._closeButtonHandler = handler;
   }
@@ -319,6 +310,17 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   setSubmitCommentHandler(handler) {
     let pressed = new Set();
+
+    const getNewCommentEmoji = () => {
+      const emoji = this.getElement().querySelector(`.film-details__add-emoji-label img`).src.split(`/`);
+      return emoji[emoji.length - 1];
+    };
+
+    const getNewCommentText = () => {
+      const text = this.getElement().querySelector(`.film-details__comment-input`);
+      return text.value;
+    };
+
     this.getElement().querySelector(`form`).addEventListener(`keydown`, function (event) {
       pressed.add(event.keyCode);
       const codes = [ENTER_KEYCODE, CTRL_KEYCODE];
@@ -329,7 +331,12 @@ export default class FilmDetails extends AbstractSmartComponent {
       }
       pressed.clear();
 
-      handler();
+      handler({
+        img: getNewCommentEmoji(),
+        commentText: getNewCommentText(),
+        commentAuthor: `Olga`,
+        commentDay: formateDateTime(new Date())
+      });
     });
 
     this.getElement().querySelector(`form`).addEventListener(`keyup`, function (event) {
