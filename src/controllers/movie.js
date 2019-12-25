@@ -139,18 +139,9 @@ export default class MovieController {
   }
 
   _getNewComment() {
-    const popapElement = this._filmDetailsComponent.getElement();
-    const getEmoji = () => {
-      const emoji = popapElement.querySelector(`.film-details__add-emoji-label img`).src.split(`/`);
-      return emoji[emoji.length - 1];
-    };
-    const getText = () => {
-      const text = popapElement.querySelector(`.film-details__comment-input`);
-      return text.value;
-    };
     return {
-      img: getEmoji(),
-      commentText: getText(),
+      img: this._filmDetailsComponent.getNewCommentEmoji(),
+      commentText: this._filmDetailsComponent.getNewCommentText(),
       commentAuthor: `Olga`,
       commentDay: formateDateTime(new Date())
     };

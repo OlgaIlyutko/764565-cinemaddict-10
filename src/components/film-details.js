@@ -220,6 +220,16 @@ export default class FilmDetails extends AbstractSmartComponent {
     }, this._addToWachist);
   }
 
+  getNewCommentEmoji() {
+    const emoji = this.getElement().querySelector(`.film-details__add-emoji-label img`).src.split(`/`);
+    return emoji[emoji.length - 1];
+  }
+
+  getNewCommentText() {
+    const text = this.getElement().querySelector(`.film-details__comment-input`);
+    return text.value;
+  }
+
   setCloseButtonClickHandler(handler) {
     this._closeButtonHandler = handler;
   }
