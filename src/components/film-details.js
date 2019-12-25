@@ -1,5 +1,9 @@
 import {getFormatedDate, getFormattedDuration} from '../utils/formatting';
 import AbstractSmartComponent from './abstract-smart-component';
+import he from 'he';
+
+const ENTER_KEYCODE = 13;
+const CTRL_KEYCODE = 17;
 
 const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
   const {poster, ageLimit, title, raiting, director, wtiters, actors, releaseDate, duration, country, genres, description, comments} = filmInfo;
@@ -65,7 +69,7 @@ const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
           <img src="./images/emoji/${it.img}" width="55" height="55" alt="emoji">
         </span>
         <div>
-          <p class="film-details__comment-text">${it.commentText}</p>
+          <p class="film-details__comment-text">${he.encode(it.commentText)}</p>
             <p class="film-details__comment-info">
             <span class="film-details__comment-author">${it.commentAuthor}</span>
             <span class="film-details__comment-day">${it.commentDay}</span>
@@ -202,6 +206,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._isWatched = film.isWatched;
     this._isFavorite = film.isFavorite;
 
+    this._deleteCommentClickHandler = null;
+
     this._addToWachist = this._isWatched;
 
     this.recoveryListeners();
@@ -212,6 +218,16 @@ export default class FilmDetails extends AbstractSmartComponent {
       isWatched: this._isWatched,
       isFavorite: this._isFavorite,
     }, this._addToWachist);
+  }
+
+  getNewCommentEmoji() {
+    const emoji = this.getElement().querySelector(`.film-details__add-emoji-label img`).src.split(`/`);
+    return emoji[emoji.length - 1];
+  }
+
+  getNewCommentText() {
+    const text = this.getElement().querySelector(`.film-details__comment-input`);
+    return text.value;
   }
 
   setCloseButtonClickHandler(handler) {
@@ -279,4 +295,45 @@ export default class FilmDetails extends AbstractSmartComponent {
     });
   }
 
+  setCommentDeleteHandler(handler) {
+    this.getElement().querySelector(`.film-details__comments-list`).addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      if (evt.target.tagName !== `BUTTON`) {
+        return;
+      }
+
+      let currentCommentButton = evt.target;
+
+      while (currentCommentButton.tagName !== `LI`) {
+        currentCommentButton = currentCommentButton.parentNode;
+      }
+
+      const commentIdElement = currentCommentButton.querySelector(`.film-details__comment-day`);
+      const commentId = commentIdElement.innerText;
+      currentCommentButton.remove();
+
+      handler(commentId);
+    });
+  }
+
+  setSubmitCommentHandler(handler) {
+    let pressed = new Set();
+    this.getElement().querySelector(`form`).addEventListener(`keydown`, function (event) {
+      pressed.add(event.keyCode);
+      const codes = [ENTER_KEYCODE, CTRL_KEYCODE];
+      for (let code of codes) {
+        if (!pressed.has(code)) {
+          return;
+        }
+      }
+      pressed.clear();
+
+      handler();
+    });
+
+    this.getElement().querySelector(`form`).addEventListener(`keyup`, function (event) {
+      pressed.delete(event.keyCode);
+    });
+  }
 }

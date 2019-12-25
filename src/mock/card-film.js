@@ -82,6 +82,7 @@ const getRandomComments = () => {
 
 const generateFilm = () => {
   return {
+    id: String(new Date() + Math.random()),
     poster: getRandomPosters(),
     ageLimit: getRandomInt(0, 18),
     title: getRandomArrayItem(TITLES_FILMS),

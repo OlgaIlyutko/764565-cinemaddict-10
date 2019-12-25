@@ -1,6 +1,7 @@
 import CardFilmComponent from '../components/card-film';
 import FilmDetailsComponent from '../components/film-details';
 import {render, replace, RenderPosition} from '../utils/render.js';
+import {formateDateTime} from '../utils/formatting';
 
 const Mode = {
   DEFAULT: `default`,
@@ -19,7 +20,6 @@ export default class MovieController {
     this._onViewChange = onViewChange;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
-
   }
 
   _emojiCommentHandler(element) {
@@ -49,6 +49,30 @@ export default class MovieController {
     }));
   }
 
+
+  _commentAddHandler(film) {
+    const allComments = film.comments;
+    const newComment = this._getNewComment();
+    allComments.push(newComment);
+
+    this._onDataChange(this, film, Object.assign({}, film, {
+      comments: allComments,
+    }));
+  }
+
+  _commentDeleteHandler(film, newComments) {
+    const allComments = film.comments;
+    const deleteComments = allComments.find((it) => {
+      return it.commentDay === newComments;
+    });
+    const deleteCommentsIndex = allComments.indexOf(deleteComments);
+    allComments.splice(deleteCommentsIndex, 1);
+
+    this._onDataChange(this, film, Object.assign({}, film, {
+      comments: allComments,
+    }));
+  }
+
   render(film) {
     const oldCardFilmComponent = this._cardFilmComponent;
     const oldFilmDetailsComponent = this._filmDetailsComponent;
@@ -72,11 +96,14 @@ export default class MovieController {
     this._filmDetailsComponent.setToFavoritesClickHandler(this._toFavoritesClickHandler.bind(this, film));
 
     this._filmDetailsComponent.setEmojiCommentHandler(this._emojiCommentHandler.bind(this));
+    this._filmDetailsComponent.setCommentDeleteHandler(this._commentDeleteHandler.bind(this, film));
 
+    this._filmDetailsComponent.setSubmitCommentHandler(this._commentAddHandler.bind(this, film));
 
     if (oldFilmDetailsComponent && oldCardFilmComponent) {
       replace(this._cardFilmComponent, oldCardFilmComponent);
       replace(this._filmDetailsComponent, oldFilmDetailsComponent);
+
     } else {
       render(this._container, this._cardFilmComponent, RenderPosition.BEFOREEND);
     }
@@ -91,6 +118,7 @@ export default class MovieController {
   }
 
   _filmPopupClose() {
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._filmDetailsComponent.getElement().remove();
     this._mode = Mode.DEFAULT;
   }
@@ -110,4 +138,12 @@ export default class MovieController {
     }
   }
 
+  _getNewComment() {
+    return {
+      img: this._filmDetailsComponent.getNewCommentEmoji(),
+      commentText: this._filmDetailsComponent.getNewCommentText(),
+      commentAuthor: `Olga`,
+      commentDay: formateDateTime(new Date())
+    };
+  }
 }

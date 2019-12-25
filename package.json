@@ -10,6 +10,7 @@
     "test": "npm run eslint"
   },
   "dependencies": {
+    "he": "1.2.0",
     "moment": "2.24.0"
   },
   "devDependencies": {
