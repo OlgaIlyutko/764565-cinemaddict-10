@@ -104,6 +104,14 @@ const getTopGenre = (films) => {
           (arr.filter((v) => v === a).length >= arr.filter((v)=>v === b).length ? a : b),
         null);
 };
+/*
+const createFilterStatTemplate = (filterStat) => {
+
+  return (
+    `<input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${isChecked ? `checked` : ``}>
+    <label for="statistic-all-time" class="statistic__filters-label">All time</label>`
+  );
+};*/
 
 const createStatisticsTemplate = ({films}) => {
   const watchedFilms = getWatchedFilms(films);
@@ -115,7 +123,8 @@ const createStatisticsTemplate = ({films}) => {
   const topGenre = getTopGenre(watchedFilms);
 
   const rank = document.querySelector(`.profile__rating`);
-
+  
+  //const filtersStatMarkup = filters.map((it) => createFilterMarkup(it, it.checked)).join(``);
   return (
     `<section class="statistic">
       <p class="statistic__rank">
@@ -127,7 +136,7 @@ const createStatisticsTemplate = ({films}) => {
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
         <p class="statistic__filters-description">Show stats:</p>
 
-        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
+        <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time">
         <label for="statistic-all-time" class="statistic__filters-label">All time</label>
 
         <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-today" value="today">
@@ -223,8 +232,20 @@ export default class Statistics extends AbstractSmartComponent {
 
   recoveryListeners() {}
 
+  setActivePeriod() {
+    const inputAll = document.querySelectorAll(`.statistic__filters-input`);
+
+    const currentfilterStatButton = Array.from(inputAll).find((it) => {
+      return it.id === this._currentPeriod;
+    });
+
+    currentfilterStatButton.checked = true;
+  }
+
   rerender(films) {
     super.rerender();
+
+    this.setActivePeriod();
 
     this._renderCharts(films);
     this._onActivePeriodStat();
