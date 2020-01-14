@@ -1,6 +1,11 @@
 import {uppercaseFirst} from '../utils/formatting';
 import AbstractComponent from './abstract-component';
 
+export const MenuItem = {
+  ALL: `all`,
+  STATISTICS: `stats`,
+};
+
 const getFilterNameByHREF = (href) => {
   return href.slice(1);
 };

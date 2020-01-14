@@ -47,6 +47,16 @@ export default class PageController {
     this._filmsModel.setFilterChangeHandler(this._onFilterChange);
   }
 
+  hide() {
+    document.querySelector(`.sort`).classList.add(`visually-hidden`);
+    document.querySelector(`.films`).classList.add(`visually-hidden`);
+  }
+
+  show() {
+    document.querySelector(`.sort`).classList.remove(`visually-hidden`);
+    document.querySelector(`.films`).classList.remove(`visually-hidden`);
+  }
+
   render() {
     const films = this._filmsModel.getFilms();
 

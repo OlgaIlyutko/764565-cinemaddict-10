@@ -48,4 +48,12 @@ export default class FilterController {
   _onDataChange() {
     this.render();
   }
+
+  setOnChange(handler) {
+    this._filterComponent.getElement().addEventListener(`click`, (evt) => {
+      const filterElement = evt.target.getAttribute(`href`);
+      const filterName = filterElement.slice(1);
+      handler(filterName);
+    });
+  }
 }

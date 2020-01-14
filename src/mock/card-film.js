@@ -93,7 +93,7 @@ const generateFilm = () => {
     releaseDate: getRandomDateTime(),
     duration: getRandomInt(0, 100),
     country: getRandomArrayItem(COUNTRY),
-    genres: getRandomGenres(3),
+    genres: getRandomGenres(1),
     description: getRandomDescription(),
     isWatchlist: Math.random() > 0.5,
     isWatched: Math.random() > 0.5,
