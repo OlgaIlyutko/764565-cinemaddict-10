@@ -123,8 +123,7 @@ const createStatisticsTemplate = ({films}) => {
   const topGenre = getTopGenre(watchedFilms);
 
   const rank = document.querySelector(`.profile__rating`);
-  
-  //const filtersStatMarkup = filters.map((it) => createFilterMarkup(it, it.checked)).join(``);
+
   return (
     `<section class="statistic">
       <p class="statistic__rank">
@@ -219,9 +218,6 @@ export default class Statistics extends AbstractSmartComponent {
       }
     };
 
-    // this._renderCharts(this._films.getFilmsAll());
-
-    // this._onActivePeriodStat = this._onActivePeriodStat.bind(this);
   }
 
   show() {

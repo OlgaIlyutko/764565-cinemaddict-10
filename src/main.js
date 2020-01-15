@@ -43,5 +43,3 @@ filterController.setMenuChangeHadler((menuItem) => {
       break;
   }
 });
-
-

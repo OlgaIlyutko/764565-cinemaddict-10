@@ -42,6 +42,7 @@ export default class FilterController {
     } else {
       render(container, this._filterComponent, RenderPosition.BEFOREEND);
     }
+
   }
 
   _onFilterChange(filterType) {
@@ -55,5 +56,6 @@ export default class FilterController {
 
   setMenuChangeHadler(handler) {
     this._pageSwapHandler = handler;
+    this._filterComponent.setMenuChangeHadler(handler);
   }
 }

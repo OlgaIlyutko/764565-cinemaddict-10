@@ -60,6 +60,9 @@ export default class Filter extends AbstractComponent {
   }
 
   setMenuChangeHadler(handler) {
+    if (!handler) {
+      return;
+    }
     this.getElement().addEventListener(`click`, (evt) => {
       if (!evt.target.classList.contains(`main-navigation__item`)) {
         return;
