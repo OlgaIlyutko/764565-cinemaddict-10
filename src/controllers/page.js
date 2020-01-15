@@ -48,13 +48,13 @@ export default class PageController {
   }
 
   hide() {
-    document.querySelector(`.sort`).classList.add(`visually-hidden`);
-    document.querySelector(`.films`).classList.add(`visually-hidden`);
+    this._sortComponent.hide();
+    this._filmsBlockComponent.hide();
   }
 
   show() {
-    document.querySelector(`.sort`).classList.remove(`visually-hidden`);
-    document.querySelector(`.films`).classList.remove(`visually-hidden`);
+    this._sortComponent.show();
+    this._filmsBlockComponent.show();
   }
 
   render() {
@@ -133,7 +133,7 @@ export default class PageController {
         sortedFilms = this._defaultFilms.slice();
         break;
     }
-    this._listFilmsStandardContainerElement.innerHTML = ``;
+    this._removeFilms();
     renderFilms(this._listFilmsStandardContainerElement, sortedFilms.slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange);
   }
 
@@ -156,7 +156,7 @@ export default class PageController {
 
   _onFilterChange() {
     this._removeFilms();
-    renderFilms(this._listFilmsStandardContainerElement, this._filmsModel.getFilms().slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange);
+    this._showedFilmsControllers = renderFilms(this._listFilmsStandardContainerElement, this._filmsModel.getFilms().slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange);
     this._renderButtonShowMoreComponent();
   }
 }

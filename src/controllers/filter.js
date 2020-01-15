@@ -13,8 +13,10 @@ export default class FilterController {
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
+    this.setOnChange = this.setOnChange.bind(this);
 
     this._filmsModel.setDataChangeHandler(this._onDataChange);
+    this._filmsModel.setDataChangeHandler(this.setOnChange);
   }
 
   render() {
@@ -51,6 +53,9 @@ export default class FilterController {
 
   setOnChange(handler) {
     this._filterComponent.getElement().addEventListener(`click`, (evt) => {
+      if (evt.target.tagName !== `A`) {
+        return;
+      }
       const filterElement = evt.target.getAttribute(`href`);
       const filterName = filterElement.slice(1);
       handler(filterName);

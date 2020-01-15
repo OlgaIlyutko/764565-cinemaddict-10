@@ -48,6 +48,9 @@ export default class Filter extends AbstractComponent {
 
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
+      if (evt.target.tagName !== `A`) {
+        return;
+      }
       const filterElement = evt.target.getAttribute(`href`);
       const filterName = getFilterNameByHREF(filterElement);
       changeActiveClass(evt);
