@@ -13,10 +13,11 @@ export default class FilterController {
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onFilterChange = this._onFilterChange.bind(this);
-    this.setOnChange = this.setOnChange.bind(this);
 
     this._filmsModel.setDataChangeHandler(this._onDataChange);
-    this._filmsModel.setDataChangeHandler(this.setOnChange);
+
+    this._pageSwapHandler = null;
+
   }
 
   render() {
@@ -34,6 +35,7 @@ export default class FilterController {
 
     this._filterComponent = new FilterComponent(filters);
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
+    this._filterComponent.setMenuChangeHadler(this._pageSwapHandler);
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);
@@ -51,14 +53,7 @@ export default class FilterController {
     this.render();
   }
 
-  setOnChange(handler) {
-    this._filterComponent.getElement().addEventListener(`click`, (evt) => {
-      if (evt.target.tagName !== `A`) {
-        return;
-      }
-      const filterElement = evt.target.getAttribute(`href`);
-      const filterName = filterElement.slice(1);
-      handler(filterName);
-    });
+  setMenuChangeHadler(handler) {
+    this._pageSwapHandler = handler;
   }
 }

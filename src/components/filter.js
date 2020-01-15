@@ -58,4 +58,13 @@ export default class Filter extends AbstractComponent {
       handler(filterName);
     });
   }
+
+  setMenuChangeHadler(handler) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      if (!evt.target.classList.contains(`main-navigation__item`)) {
+        return;
+      }
+      handler(evt.target.getAttribute(`href`).slice(1));
+    });
+  }
 }

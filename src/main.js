@@ -31,7 +31,7 @@ statisticsComponent.hide();
 pageController.render();
 
 
-filterController.setOnChange((menuItem) => {
+filterController.setMenuChangeHadler((menuItem) => {
   switch (menuItem) {
     case `stats`:
       pageController.hide();
@@ -43,3 +43,5 @@ filterController.setOnChange((menuItem) => {
       break;
   }
 });
+
+
