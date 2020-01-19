@@ -21,7 +21,7 @@ const uppercaseFirst = (word) => {
 const getFormattedDuration = (durationMinutes) => {
   const duration = moment.duration(durationMinutes, `minutes`);
   const [hours, minutes] = [duration.get(`hours`), duration.get(`minutes`)];
-  return `${(hours > 0) ? `${hours}h ` : ``}${minutes}min`;
+  return `${(hours > 0) ? `${hours}h ` : ``}${(minutes > 0) ? `${minutes}min` : ``}`;
 };
 
 export {getFormatedDate, getFormatedDateTime, uppercaseFirst, getFormattedDuration, formateDateTime};

@@ -1,6 +1,11 @@
 import {uppercaseFirst} from '../utils/formatting';
 import AbstractComponent from './abstract-component';
 
+export const MenuItem = {
+  ALL: `all`,
+  STATISTICS: `stats`,
+};
+
 const getFilterNameByHREF = (href) => {
   return href.slice(1);
 };
@@ -43,11 +48,26 @@ export default class Filter extends AbstractComponent {
 
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
+      if (evt.target.tagName !== `A`) {
+        return;
+      }
       const filterElement = evt.target.getAttribute(`href`);
       const filterName = getFilterNameByHREF(filterElement);
       changeActiveClass(evt);
 
       handler(filterName);
+    });
+  }
+
+  setMenuChangeHadler(handler) {
+    if (!handler) {
+      return;
+    }
+    this.getElement().addEventListener(`click`, (evt) => {
+      if (!evt.target.classList.contains(`main-navigation__item`)) {
+        return;
+      }
+      handler(evt.target.getAttribute(`href`).slice(1));
     });
   }
 }
