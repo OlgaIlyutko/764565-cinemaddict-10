@@ -1,23 +1,23 @@
 import AbstractComponent from '../components/abstract-component';
-import {getFormattedDuration} from '../utils/formatting';
+import {getFormattedDuration, formateDateYear} from '../utils/formatting';
 
 const createCardFilmTemplate = (film) => {
-  const {poster, title, raiting, releaseDate, duration, genres, description, isWatchlist, isWatched, isFavorite, comments} = film;
+  const {poster, title, rating, releaseDate, duration, genres, description, isWatchlist, isWatched, isFavorite} = film;
   const controlClass = (controlName) => {
     return controlName ? ` film-card__controls-item--active` : ``;
   };
   return (
     `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
-      <p class="film-card__rating">${raiting}</p>
+      <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
-      <span class="film-card__year">${releaseDate.getFullYear()}</span>
+      <span class="film-card__year">${formateDateYear(releaseDate)}</span>
       <span class="film-card__duration">${getFormattedDuration(duration)}</span>
-      <span class="film-card__genre">${genres[0]}</span>
+      <span class="film-card__genre">${genres.length ? genres[0] : ``}</span>
       </p>
       <img src="./images/posters/${poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${description}</p>
-      <a class="film-card__comments">${comments.length} comments</a>
+      <p class="film-card__description">${(description.length > 140) ? description.slice(0, 139) + `&hellip;` : description}</p>
+      <a class="film-card__comments">0 comments</a>
       <form class="film-card__controls">
       <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist${controlClass(isWatchlist)}">Add to watchlist</button>
       <button class="film-card__controls-item button film-card__controls-item--mark-as-watched${controlClass(isWatched)}">Mark as watched</button>

@@ -14,6 +14,11 @@ const formateDateTime = function (dateTime) {
   return moment(dateTime).format(`YYYY/MM/DD HH:MM`);
 };
 
+const formateDateYear = function (dateTime) {
+  return moment(dateTime).format(`YYYY`);
+};
+
+
 const uppercaseFirst = (word) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 };
@@ -24,4 +29,4 @@ const getFormattedDuration = (durationMinutes) => {
   return `${(hours > 0) ? `${hours}h ` : ``}${(minutes > 0) ? `${minutes}min` : ``}`;
 };
 
-export {getFormatedDate, getFormatedDateTime, uppercaseFirst, getFormattedDuration, formateDateTime};
+export {getFormatedDate, getFormatedDateTime, uppercaseFirst, getFormattedDuration, formateDateTime, formateDateYear};
