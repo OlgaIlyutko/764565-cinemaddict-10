@@ -2,21 +2,23 @@ import AbstractSmartComponent from './abstract-smart-component.js';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {getFormattedDuration} from '../utils/formatting';
+import moment from 'moment';
 
-const getWeekData = (films) => {
-  return films;
+const getWeekData = (data) => {
+  const start = moment().subtract(`days`, 7);
+  return data.filter((it) => moment(it.watchedDate).isAfter(start._d));
 };
-
-const getTodayData = (films) => {
-  return films;
+const getTodayData = (data) => {
+  const start = moment().startOf(`day`);
+  return data.filter((it) => moment(it.watchedDate).isAfter(start._d));
 };
-
-const getYearData = (films) => {
-  return films;
+const getYearData = (data) => {
+  const start = moment().subtract(`years`, 1);
+  return data.filter((it) => moment(it.watchedDate).isAfter(start._d));
 };
-
-const getMonthData = (films) => {
-  return films;
+const getMonthData = (data) => {
+  const start = moment().subtract(`months`, 1);
+  return data.filter((it) => moment(it.watchedDate).isAfter(start._d));
 };
 
 const getUniqItems = (item, index, array) => {
@@ -104,18 +106,8 @@ const getTopGenre = (films) => {
           (arr.filter((v) => v === a).length >= arr.filter((v)=>v === b).length ? a : b),
         null);
 };
-/*
-const createFilterStatTemplate = (filterStat) => {
 
-  return (
-    `<input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" ${isChecked ? `checked` : ``}>
-    <label for="statistic-all-time" class="statistic__filters-label">All time</label>`
-  );
-};*/
-
-const createStatisticsTemplate = ({films}) => {
-  const watchedFilms = getWatchedFilms(films);
-
+const createStatisticsTemplate = (watchedFilms) => {
   const totalDuration = getFormattedDuration(getTotalDurationWatchedFilms(watchedFilms));
   const durationHours = totalDuration.slice(0, totalDuration.indexOf(`h`));
   const durationMin = totalDuration.slice(totalDuration.indexOf(`h`) + 2, totalDuration.indexOf(`min`));
@@ -167,7 +159,7 @@ const createStatisticsTemplate = ({films}) => {
       </ul>
 
       <div class="statistic__chart-wrap">
-        <canvas class="statistic__chart" width="1000" height="250"></canvas>
+        <canvas class="statistic__chart" width="1000"></canvas>
       </div>
 
     </section>`
@@ -270,6 +262,6 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createStatisticsTemplate({films: this._films.getFilmsAll()});
+    return createStatisticsTemplate(this._filteredData);
   }
 }
