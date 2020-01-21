@@ -3,6 +3,7 @@ import FilmDetailsComponent from '../components/film-details';
 import Film from '../models/movie';
 import CommentsComponent from '../components/comments';
 import {render, replace, RenderPosition} from '../utils/render.js';
+import Comment from '../models/comments';
 
 const Mode = {
   DEFAULT: `default`,
@@ -53,13 +54,13 @@ export default class MovieController {
   }
 
 
-  _commentAddHandler(film, newComment) {
-    const allComments = film.comments;
-    allComments.push(newComment);
+  _commentAddHandler(film, addComment) {
+    /*const newComment = new Comment();
+    //const allComments = film.comments;
+    console.log(newComment);
+    //allComments.push(newComment);
 
-    this._onDataChange(this, film, Object.assign({}, film, {
-      comments: allComments,
-    }));
+    this._onDataChange(this, film, newComment);*/
   }
 
   _commentDeleteHandler(film, delComments) {

@@ -195,7 +195,6 @@ export default class FilmDetails extends AbstractSmartComponent {
         if (this._toWatchlistClickHandler) {
           this._toWatchlistClickHandler();
         }
-        this.rerender();
       });
 
     element.querySelector(`#watched`)
@@ -205,7 +204,6 @@ export default class FilmDetails extends AbstractSmartComponent {
         if (this._watchedClickHandler) {
           this._watchedClickHandler();
         }
-        this.rerender();
       });
 
     element.querySelector(`#favorite`)
@@ -214,7 +212,6 @@ export default class FilmDetails extends AbstractSmartComponent {
         if (this._toFavoritesClickHandler) {
           this._toFavoritesClickHandler();
         }
-        this.rerender();
       });
 
     element.querySelector(`.film-details__close-btn`)
@@ -249,7 +246,6 @@ export default class FilmDetails extends AbstractSmartComponent {
       handler({
         img: getNewCommentEmoji(),
         commentText: getNewCommentText(),
-        commentAuthor: `Olga`,
         commentDay: formateDateTime(new Date())
       });
     });

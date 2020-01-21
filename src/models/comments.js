@@ -7,18 +7,13 @@ export default class Comment {
     this.commentDay = data[`date`] || null;
   }
 
-  /* toRAW() {
-      return {
-        'id': this.id,
-        'description': this.description,
-        'due_date': this.dueDate ? this.dueDate.toISOString() : null,
-        'tags': Array.from(this.tags),
-        'repeating_days': this.repeatingDays,
-        'color': this.color,
-        'is_favorite': this.isFavorite,
-        'is_archived': this.isArchive,
-      };
-    }*/
+  toRAW() {
+    return {
+      'comment': this.commentText,
+      'date': new Date(this.commentDay).toISOString(),
+      'emotion': this.img
+    };
+  }
 
   static parseComment(data) {
     return new Comment(data);

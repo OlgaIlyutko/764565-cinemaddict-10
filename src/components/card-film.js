@@ -53,16 +53,25 @@ export default class CardFilm extends AbstractComponent {
 
   setToWatchlistClickHandler(handler) {
     this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`)
-    .addEventListener(`click`, handler);
+    .addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      handler(evt);
+    });
   }
 
   setWatchedClickHandler(handler) {
     this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`)
-    .addEventListener(`click`, handler);
+    .addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      handler(evt);
+    });
   }
 
   setToFavoritesClickHandler(handler) {
     this.getElement().querySelector(`.film-card__controls-item--favorite`)
-    .addEventListener(`click`, handler);
+    .addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      handler(evt);
+    });
   }
 }
