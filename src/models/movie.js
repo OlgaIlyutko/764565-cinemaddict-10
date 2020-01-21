@@ -8,7 +8,7 @@ export default class Film {
     this.alternativeTitle = data[`film_info`][`alternative_title`];
     this.rating = data[`film_info`][`total_rating`];
     this.director = data[`film_info`][`director`];
-    this.wtiters = data[`film_info`][`writers`];
+    this.writers = data[`film_info`][`writers`];
     this.actors = data[`film_info`][`actors`];
     this.releaseDate = data[`film_info`][`release`][`date`];
     this.country = data[`film_info`][`release`][`release_country`];

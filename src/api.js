@@ -30,6 +30,7 @@ const API = class {
   }
 
   updateFilm(id, data) {
+    console.log(JSON.stringify(data.toRAW()));
     return this._load({
       url: `movies/${id}`,
       method: Method.PUT,

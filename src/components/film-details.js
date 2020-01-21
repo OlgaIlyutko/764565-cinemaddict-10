@@ -7,7 +7,7 @@ const ENTER_KEYCODE = 13;
 const CTRL_KEYCODE = 17;
 
 const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
-  const {poster, ageLimit, title, alternativeTitle, rating, director, wtiters, actors, releaseDate, duration, country, genres, description, personalRating} = filmInfo;
+  const {poster, ageLimit, title, alternativeTitle, rating, director, writers, actors, releaseDate, duration, country, genres, description, personalRating} = filmInfo;
   const {isWatchlist, isWatched, isFavorite} = options;
   const getGenres = Array.from(genres).map((it) => `<span class="film-details__genre">${it}</span>`).join(``);
   const generateRaitingBlock = () => {
@@ -96,7 +96,7 @@ const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Writers</td>
-            <td class="film-details__cell">${wtiters}</td>
+            <td class="film-details__cell">${writers}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Actors</td>
