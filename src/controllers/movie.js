@@ -3,7 +3,6 @@ import FilmDetailsComponent from '../components/film-details';
 import Film from '../models/movie';
 import CommentsComponent from '../components/comments';
 import {render, replace, RenderPosition} from '../utils/render.js';
-import Comment from '../models/comments';
 
 const Mode = {
   DEFAULT: `default`,
@@ -105,24 +104,26 @@ export default class MovieController {
     } else {
       render(this._container, this._cardFilmComponent, RenderPosition.BEFOREEND);
     }
+  }
 
-    this._api.getComments(film.id)
+  _filmPopupOpen() {
+    const openedFilm = this._filmDetailsComponent._film;
+    this._onViewChange();
+    const siteFooterElement = document.querySelector(`footer`);
+    render(siteFooterElement, this._filmDetailsComponent, RenderPosition.BEFOREEND);
+
+    this._api.getComments(openedFilm.id)
       .then((comments) => {
         this._commentsComponent = new CommentsComponent(comments);
         const commentsContainer = this._filmDetailsComponent.getElement().querySelector(`.form-details__bottom-container`);
 
-        this._commentsComponent.setCommentDeleteHandler(this._commentDeleteHandler.bind(this, film));
+        this._commentsComponent.setCommentDeleteHandler(this._commentDeleteHandler.bind(this, openedFilm));
         this._commentsComponent.setEmojiCommentHandler(this._emojiCommentHandler.bind(this));
-        this._filmDetailsComponent.setSubmitCommentHandler(this._commentAddHandler.bind(this, film));
+        this._filmDetailsComponent.setSubmitCommentHandler(this._commentAddHandler.bind(this, openedFilm));
 
         render(commentsContainer, this._commentsComponent, RenderPosition.AFTERBEGIN);
       });
-  }
 
-  _filmPopupOpen() {
-    this._onViewChange();
-    const siteFooterElement = document.querySelector(`footer`);
-    render(siteFooterElement, this._filmDetailsComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._mode = Mode.POPAP;
   }

@@ -160,7 +160,12 @@ export default class PageController {
 
   _onFilterChange() {
     this._removeFilms();
-    this._showedFilmsControllers = renderFilms(this._listFilmsStandardContainerElement, this._filmsModel.getFilms().slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange, this._api);
-    this._renderButtonShowMoreComponent();
+    let filteredFilms = this._filmsModel.getFilms().slice(0, this._showingFilmsCount);
+    this._showedFilmsControllers = renderFilms(this._listFilmsStandardContainerElement, filteredFilms, this._onDataChange, this._onViewChange, this._api);
+    if (this._showingFilmsCount > filteredFilms.length) {
+      remove(this._buttonShowMoreComponent);
+    } else {
+      this._renderButtonShowMoreComponent();
+    }
   }
 }
