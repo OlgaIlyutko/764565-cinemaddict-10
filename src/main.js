@@ -1,45 +1,45 @@
+import API from './api.js';
 import FilterController from './controllers/filter.js';
 import UserRankComponent from './components/user-rank';
 import MoviesModel from './models/movies';
 import PageController from './controllers/page';
 import StatisticsComponent from './components/statistics';
-import {generateFilms} from './mock/card-film';
-import {getUserRank} from './mock/user-rank';
 import {render, RenderPosition} from './utils/render';
 
-const FILMS_COUNT = 12;
+const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=`;
+const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict/`;
 
+const api = new API(END_POINT, AUTHORIZATION);
+const filmsModel = new MoviesModel();
 const siteHeaderElement = document.querySelector(`header`);
-const rank = getUserRank();
-render(siteHeaderElement, new UserRankComponent(rank), RenderPosition.BEFOREEND);
+
 
 const siteMainElement = document.querySelector(`main`);
 
-const films = generateFilms(FILMS_COUNT);
-const filmsModel = new MoviesModel();
-filmsModel.setFilms(films);
-
 const filterController = new FilterController(siteMainElement, filmsModel);
-filterController.render();
+const pageController = new PageController(siteMainElement, filmsModel, api);
 
-const statisticsComponent = new StatisticsComponent({films: filmsModel});
-render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
+api.getFilms()
+  .then((films) => {
+    filmsModel.setFilms(films);
+    filterController.render();
+    pageController.render();
 
-const pageController = new PageController(siteMainElement, filmsModel);
+    render(siteHeaderElement, new UserRankComponent(filmsModel), RenderPosition.BEFOREEND);
+    const statisticsComponent = new StatisticsComponent({films: filmsModel});
+    render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
+    statisticsComponent.hide();
 
-statisticsComponent.hide();
-pageController.render();
-
-
-filterController.setMenuChangeHadler((menuItem) => {
-  switch (menuItem) {
-    case `stats`:
-      pageController.hide();
-      statisticsComponent.show();
-      break;
-    default:
-      statisticsComponent.hide();
-      pageController.show();
-      break;
-  }
-});
+    filterController.setMenuChangeHadler((menuItem) => {
+      switch (menuItem) {
+        case `stats`:
+          pageController.hide();
+          statisticsComponent.show();
+          break;
+        default:
+          statisticsComponent.hide();
+          pageController.show();
+          break;
+      }
+    });
+  });

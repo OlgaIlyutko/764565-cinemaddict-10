@@ -1,6 +1,9 @@
 import CardFilmComponent from '../components/card-film';
 import FilmDetailsComponent from '../components/film-details';
+import Film from '../models/movie';
+import CommentsComponent from '../components/comments';
 import {render, replace, RenderPosition} from '../utils/render.js';
+import Comment from '../models/comments';
 
 const Mode = {
   DEFAULT: `default`,
@@ -8,11 +11,13 @@ const Mode = {
 };
 
 export default class MovieController {
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, onDataChange, onViewChange, api) {
     this._container = container;
     this._cardFilmComponent = null;
     this._filmDetailsComponent = null;
+    this._commentsComponent = null;
 
+    this._api = api;
     this._mode = Mode.DEFAULT;
 
     this._onDataChange = onDataChange;
@@ -31,31 +36,31 @@ export default class MovieController {
   }
 
   _toWatchlistClickHandler(film) {
-    this._onDataChange(this, film, Object.assign({}, film, {
-      isWatchlist: !film.isWatchlist,
-    }));
+    const updateFilm = Film.clone(film);
+    updateFilm.isWatchlist = !film.isWatchlist;
+    this._onDataChange(this, film, updateFilm);
   }
 
   _watchedClickHandler(film) {
-    this._onDataChange(this, film, Object.assign({}, film, {
-      isWatched: !film.isWatched,
-    }));
+    const updateFilm = Film.clone(film);
+    updateFilm.isWatched = !film.isWatched;
+    this._onDataChange(this, film, updateFilm);
   }
 
   _toFavoritesClickHandler(film) {
-    this._onDataChange(this, film, Object.assign({}, film, {
-      isFavorite: !film.isFavorite,
-    }));
+    const updateFilm = Film.clone(film);
+    updateFilm.isFavorite = !film.isFavorite;
+    this._onDataChange(this, film, updateFilm);
   }
 
 
-  _commentAddHandler(film, newComment) {
-    const allComments = film.comments;
-    allComments.push(newComment);
+  _commentAddHandler(film, addComment) {
+    /*const newComment = new Comment();
+    //const allComments = film.comments;
+    console.log(newComment);
+    //allComments.push(newComment);
 
-    this._onDataChange(this, film, Object.assign({}, film, {
-      comments: allComments,
-    }));
+    this._onDataChange(this, film, newComment);*/
   }
 
   _commentDeleteHandler(film, delComments) {
@@ -93,11 +98,6 @@ export default class MovieController {
     this._cardFilmComponent.setToFavoritesClickHandler(this._toFavoritesClickHandler.bind(this, film));
     this._filmDetailsComponent.setToFavoritesClickHandler(this._toFavoritesClickHandler.bind(this, film));
 
-    this._filmDetailsComponent.setEmojiCommentHandler(this._emojiCommentHandler.bind(this));
-    this._filmDetailsComponent.setCommentDeleteHandler(this._commentDeleteHandler.bind(this, film));
-
-    this._filmDetailsComponent.setSubmitCommentHandler(this._commentAddHandler.bind(this, film));
-
     if (oldFilmDetailsComponent && oldCardFilmComponent) {
       replace(this._cardFilmComponent, oldCardFilmComponent);
       replace(this._filmDetailsComponent, oldFilmDetailsComponent);
@@ -105,6 +105,18 @@ export default class MovieController {
     } else {
       render(this._container, this._cardFilmComponent, RenderPosition.BEFOREEND);
     }
+
+    this._api.getComments(film.id)
+      .then((comments) => {
+        this._commentsComponent = new CommentsComponent(comments);
+        const commentsContainer = this._filmDetailsComponent.getElement().querySelector(`.form-details__bottom-container`);
+
+        this._commentsComponent.setCommentDeleteHandler(this._commentDeleteHandler.bind(this, film));
+        this._commentsComponent.setEmojiCommentHandler(this._emojiCommentHandler.bind(this));
+        this._filmDetailsComponent.setSubmitCommentHandler(this._commentAddHandler.bind(this, film));
+
+        render(commentsContainer, this._commentsComponent, RenderPosition.AFTERBEGIN);
+      });
   }
 
   _filmPopupOpen() {
