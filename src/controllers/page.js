@@ -100,6 +100,7 @@ export default class PageController {
   }
 
   _renderButtonShowMoreComponent() {
+    remove(this._buttonShowMoreComponent);
     if (this._showingFilmsCount >= this._filmsModel.getFilms().length) {
       return;
     }
@@ -162,10 +163,6 @@ export default class PageController {
     this._removeFilms();
     let filteredFilms = this._filmsModel.getFilms().slice(0, this._showingFilmsCount);
     this._showedFilmsControllers = renderFilms(this._listFilmsStandardContainerElement, filteredFilms, this._onDataChange, this._onViewChange, this._api);
-    if (this._showingFilmsCount > filteredFilms.length) {
-      remove(this._buttonShowMoreComponent);
-    } else {
-      this._renderButtonShowMoreComponent();
-    }
+    this._renderButtonShowMoreComponent();
   }
 }
