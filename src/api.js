@@ -46,10 +46,19 @@ const API = class {
     .then((json) => Comments.parseComments(json));
   }
 
-  createComment(film) {
+  createComment(id, comment) {
+    return this._load({
+      url: `comments/${id}`,
+      method: Method.POST,
+      body: JSON.stringify(comment.toRAW()),
+      headers: new Headers({'Content-Type': `application/json`})
+    });
+    /*  .then((response) => response.json())
+      .then(Task.parseTask);*/
   }
 
-  deleteComment(film) {
+  deleteComment(id) {
+    return this._load({url: `comments/${id}`, method: Method.DELETE});
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {

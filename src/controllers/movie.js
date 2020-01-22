@@ -1,6 +1,7 @@
 import CardFilmComponent from '../components/card-film';
 import FilmDetailsComponent from '../components/film-details';
 import Film from '../models/movie';
+import Comment from '../models/comments';
 import CommentsComponent from '../components/comments';
 import {render, replace, RenderPosition} from '../utils/render.js';
 
@@ -54,12 +55,14 @@ export default class MovieController {
 
 
   _commentAddHandler(film, addComment) {
-    /*const newComment = new Comment();
-    //const allComments = film.comments;
-    console.log(newComment);
-    //allComments.push(newComment);
+    const newComment = new Comment({});
+    Object.assign(newComment, addComment);
 
-    this._onDataChange(this, film, newComment);*/
+    this._api.createComment(film.id, newComment)
+          .then(() => this._onDataChange(this, film, film))
+          .catch(() => {
+            console.log(`fdff`);
+          });
   }
 
   _commentDeleteHandler(film, delComments) {
@@ -107,12 +110,12 @@ export default class MovieController {
   }
 
   _filmPopupOpen() {
-    const openedFilm = this._filmDetailsComponent._film;
+    //const openedFilm = this._filmDetailsComponent._film;
     this._onViewChange();
     const siteFooterElement = document.querySelector(`footer`);
     render(siteFooterElement, this._filmDetailsComponent, RenderPosition.BEFOREEND);
 
-    this._api.getComments(openedFilm.id)
+    /*this._api.getComments(openedFilm.id)
       .then((comments) => {
         this._commentsComponent = new CommentsComponent(comments);
         const commentsContainer = this._filmDetailsComponent.getElement().querySelector(`.form-details__bottom-container`);
@@ -122,7 +125,7 @@ export default class MovieController {
         this._filmDetailsComponent.setSubmitCommentHandler(this._commentAddHandler.bind(this, openedFilm));
 
         render(commentsContainer, this._commentsComponent, RenderPosition.AFTERBEGIN);
-      });
+      });*/
 
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._mode = Mode.POPAP;

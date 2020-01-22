@@ -20,11 +20,11 @@ const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
 
           <div class="film-details__user-score">
             <div class="film-details__user-rating-poster">
-              <img src="./images/posters/the-great-flamarion.jpg" alt="film-poster" class="film-details__user-rating-img">
+              <img src=${poster} alt="film-poster" class="film-details__user-rating-img">
             </div>
 
             <section class="film-details__user-rating-inner">
-              <h3 class="film-details__user-rating-title">The Great Flamarion</h3>
+              <h3 class="film-details__user-rating-title">${title}</h3>
 
               <p class="film-details__user-rating-feelings">How you feel it?</p>
 
@@ -162,6 +162,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
     this.recoveryListeners();
   }
+
   getTemplate() {
     return createFilmDetailsTemplate(this._film, {
       isWatchlist: this._isWatchlist,
@@ -224,8 +225,10 @@ export default class FilmDetails extends AbstractSmartComponent {
     let pressed = new Set();
 
     const getNewCommentEmoji = () => {
-      const emoji = this.getElement().querySelector(`.film-details__add-emoji-label img`).src.split(`/`);
-      return emoji[emoji.length - 1];
+      const emojiFullName = this.getElement().querySelector(`.film-details__add-emoji-label img`).src.split(`/`);
+      const emojiName = emojiFullName[emojiFullName.length - 1];
+      const emojiIndex = emojiName.lastIndexOf(`.`);
+      return emojiName.slice(0, emojiIndex);
     };
 
     const getNewCommentText = () => {
