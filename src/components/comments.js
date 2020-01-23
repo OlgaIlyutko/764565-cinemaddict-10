@@ -18,7 +18,7 @@ export default class CommentsFilm extends AbstractComponent {
             <p class="film-details__comment-info">
             <span class="film-details__comment-author">${it.commentAuthor}</span>
             <span class="film-details__comment-day">${formateDateTime(it.commentDay)}</span>
-            <button class="film-details__comment-delete">Delete</button>
+            <button class="film-details__comment-delete" data-id="${it.id}">Delete</button>
           </p>
         </div>
       </li>`).join(``);
@@ -69,17 +69,7 @@ export default class CommentsFilm extends AbstractComponent {
         return;
       }
 
-      let currentCommentButton = evt.target;
-
-      while (currentCommentButton.tagName !== `LI`) {
-        currentCommentButton = currentCommentButton.parentNode;
-      }
-
-      const commentIdElement = currentCommentButton.querySelector(`.film-details__comment-day`);
-      const commentId = commentIdElement.innerText;
-      currentCommentButton.remove();
-
-      handler(commentId);
+      handler(evt);
     });
   }
 

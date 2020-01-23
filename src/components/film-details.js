@@ -187,6 +187,20 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._toFavoritesClickHandler = handler;
   }
 
+  setToSentPersonalRating(handler) {
+    this._toSentPersonalRating = handler;
+  }
+
+  disableCommentForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = true;
+    this.getElement().querySelector(`.film-details__comment-input`).style.backgroundColor = `grey`;
+  }
+
+  enableCommentForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
+    this.getElement().querySelector(`.film-details__comment-input`).style.backgroundColor = `white`;
+  }
+
   recoveryListeners() {
     const element = this.getElement();
 
@@ -214,6 +228,23 @@ export default class FilmDetails extends AbstractSmartComponent {
           this._toFavoritesClickHandler();
         }
       });
+
+    element.querySelectorAll(`.film-details__user-rating-input`).forEach((item) => {
+      item.addEventListener(`click`, (evt) => {
+        if (this._toSentPersonalRating) {
+          this._toSentPersonalRating(evt.target.value);
+        }
+      });
+    });
+
+    if (element.querySelector(`.film-details__watched-reset`)) {
+      element.querySelector(`.film-details__watched-reset`)
+      .addEventListener(`click`, () => {
+        if (this._watchedClickHandler) {
+          this._watchedClickHandler();
+        }
+      });
+    }
 
     element.querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, () => {
