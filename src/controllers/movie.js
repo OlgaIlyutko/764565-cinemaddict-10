@@ -24,6 +24,8 @@ export default class MovieController {
     this._onViewChange = onViewChange;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
+
+    this._isRenderComments = false;
   }
 
   _emojiCommentHandler(element) {
@@ -107,15 +109,18 @@ export default class MovieController {
     } else {
       render(this._container, this._cardFilmComponent, RenderPosition.BEFOREEND);
     }
+
+    if (this._mode === Mode.POPUP) {
+      this._renderComments();
+    }
   }
 
-  _filmPopupOpen() {
-    //const openedFilm = this._filmDetailsComponent._film;
-    this._onViewChange();
-    const siteFooterElement = document.querySelector(`footer`);
-    render(siteFooterElement, this._filmDetailsComponent, RenderPosition.BEFOREEND);
-
-    /*this._api.getComments(openedFilm.id)
+  _renderComments() {
+    if (this._isRenderComments) {
+      return;
+    }
+    const openedFilm = this._filmDetailsComponent._film;
+    this._api.getComments(openedFilm.id)
       .then((comments) => {
         this._commentsComponent = new CommentsComponent(comments);
         const commentsContainer = this._filmDetailsComponent.getElement().querySelector(`.form-details__bottom-container`);
@@ -125,10 +130,18 @@ export default class MovieController {
         this._filmDetailsComponent.setSubmitCommentHandler(this._commentAddHandler.bind(this, openedFilm));
 
         render(commentsContainer, this._commentsComponent, RenderPosition.AFTERBEGIN);
-      });*/
+        this._isRenderComments = true;
+      });
+  }
 
+  _filmPopupOpen() {
+    this._onViewChange();
+    const siteFooterElement = document.querySelector(`footer`);
+    this._mode = Mode.POPUP;
+    render(siteFooterElement, this._filmDetailsComponent, RenderPosition.BEFOREEND);
+    this._mode = Mode.POPUP;
     document.addEventListener(`keydown`, this._onEscKeyDown);
-    this._mode = Mode.POPAP;
+    this._renderComments();
   }
 
   _filmPopupClose() {
