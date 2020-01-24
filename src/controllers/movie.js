@@ -5,8 +5,6 @@ import Comment from '../models/comments';
 import CommentsComponent from '../components/comments';
 import {render, replace, RenderPosition} from '../utils/render.js';
 
-const SHAKE_ANIMATION_TIMEOUT = 600;
-
 const Mode = {
   DEFAULT: `default`,
   POPUP: `popup`
@@ -48,6 +46,7 @@ export default class MovieController {
   _watchedClickHandler(film) {
     const updateFilm = Film.clone(film);
     updateFilm.isWatched = !film.isWatched;
+    updateFilm.watchedDate = new Date();
     if (!updateFilm.isWatched) {
       updateFilm.personalRating = 0;
     }
@@ -61,8 +60,20 @@ export default class MovieController {
   }
 
   _toSentPersonalRating(film, newPersonalRating) {
+    const idNewPersonalRating = `#rating-` + newPersonalRating;
+    this._filmDetailsComponent.disableRatingBlock();
     const updateFilm = Film.clone(film);
     updateFilm.personalRating = parseInt(newPersonalRating, 10);
+    this._api.updateFilm(film, updateFilm)
+      .then(() => {
+        this._onDataChange(this, film, updateFilm);
+        this._filmDetailsComponent.enableCommentForm();
+      })
+      .catch(() => {
+        this._filmDetailsComponent.enableCommentForm();
+        this._filmDetailsComponent.getElement().classList.add(`shake`);
+        this._filmDetailsComponent.getElement().querySelector(idNewPersonalRating).raitingElement.style.backgroundColor = `red`;
+      });
     this._onDataChange(this, film, updateFilm);
   }
 
@@ -74,22 +85,25 @@ export default class MovieController {
     const newComment = new Comment({});
     Object.assign(newComment, addComment);
     this._api.createComment(film.id, newComment)
-          .then(() => {
-            this._onDataChange(this, film, film);
-            this._filmDetailsComponent.enableCommentForm();
-          })
-          .catch(() => {
-            this._filmDetailsComponent.enableCommentForm();
-            this._filmDetailsComponent.getElement().classList.add(`shake`);
-            this._filmDetailsComponent.getElement().querySelector(`.film-details__comment-input`).style.border = `3px solid red`;
-          });
+      .then(() => {
+        this._onDataChange(this, film, film);
+        this._filmDetailsComponent.enableCommentForm();
+      })
+      .catch(() => {
+        this._filmDetailsComponent.enableCommentForm();
+        this._filmDetailsComponent.getElement().classList.add(`shake`);
+        this._filmDetailsComponent.getElement().querySelector(`.film-details__comment-input`).style.border = `3px solid red`;
+      });
   }
 
   _commentDeleteHandler(film, evt) {
+    evt.target.textContent = `Deleting...`;
+    evt.target.disabled = true;
     this._api.deleteComment(evt.target.dataset.id)
       .then(() => this._onDataChange(this, film, film))
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
+        evt.target.textContent = `Delete`;
+        evt.target.disabled = false;
       });
   }
 

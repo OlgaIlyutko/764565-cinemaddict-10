@@ -1,7 +1,13 @@
 import FilterComponent from '../components/filter.js';
-import {FilterType} from '../mock/filter';
 import {render, replace, RenderPosition} from '../utils/render.js';
 import {getFilmsByFilter} from '../utils/filter.js';
+
+const FilterType = {
+ //ALL: `all movies`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`,
+};
 
 export default class FilterController {
   constructor(container, filmsModel) {
@@ -34,7 +40,7 @@ export default class FilterController {
 
     this._filterComponent = new FilterComponent(filters);
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
-    this._filterComponent.setMenuChangeHadler(this._pageSwapHandler);
+    this._filterComponent.setMenuChangeHandler(this._pageSwapHandler);
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);
@@ -53,8 +59,8 @@ export default class FilterController {
     this.render();
   }
 
-  setMenuChangeHadler(handler) {
+  setMenuChangeHandler(handler) {
     this._pageSwapHandler = handler;
-    this._filterComponent.setMenuChangeHadler(handler);
+    this._filterComponent.setMenuChangeHandler(handler);
   }
 }

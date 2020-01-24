@@ -28,6 +28,8 @@ export default class PageController {
     this._showingFilmsCount = SHOWING_FILMS_COUNT_ON_START;
     this._showedFilmsControllers = [];
 
+    this._currentSortType = SortType.DEFAULT;
+
     this._noFilmsComponent = new NoFilmsComponent();
     this._sortComponent = new SortComponent();
     this._filmsBlockComponent = new FilmsBlockComponent();
@@ -41,10 +43,13 @@ export default class PageController {
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
-    this._onFilterChange = this._onFilterChange.bind(this);
+   // this._onFilterChange = this._onFilterChange.bind(this);
+    this._onFilterSortRender = this._onFilterSortRender.bind(this);
 
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
-    this._filmsModel.setFilterChangeHandler(this._onFilterChange);
+    this._sortComponent.setSortTypeChangeHandler(this._onFilterSortRender);
+    this._filmsModel.setFilterChangeHandler(this._onFilterSortRender);
+
   }
 
   hide() {
@@ -94,7 +99,7 @@ export default class PageController {
     render(filmsBlock, this._listFilmsExtraTopRatedComponent, RenderPosition.BEFOREEND);
     render(filmsBlock, this._listFilmsExtraMostCommentedComponent, RenderPosition.BEFOREEND);
 
-    const films = this._filmsModel.getFilms();
+    const films = this._filmsModel._films;
 
     const listFilmsExtraTopRatedElement = this._listFilmsExtraTopRatedComponent.getElement().querySelector(`.films-list__container`);
     const filmsTopRated = films.slice().sort((a, b) => b.rating - a.rating);
@@ -127,7 +132,10 @@ export default class PageController {
   }
 
   _onSortTypeChange(sortType) {
-    let sortedFilms = [];
+    console.log(`ss`);
+    this._currentSortType = sortType;
+    this._onFilterSortRender();
+    /*
     const films = this._filmsModel.getFilms();
     switch (sortType) {
       case SortType.DATE:
@@ -137,11 +145,9 @@ export default class PageController {
         sortedFilms = films.sort((a, b) => a.rating - b.rating);
         break;
       case SortType.DEFAULT:
-        sortedFilms = this._defaultFilms.slice();
+        sortedFilms = films.slice();
         break;
-    }
-    this._removeFilms();
-    renderFilms(this._listFilmsStandardContainerElement, sortedFilms.slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange, this._api);
+    }*/
   }
 
   _onDataChange(filmController, oldData, newData) {
@@ -154,7 +160,7 @@ export default class PageController {
             remove(this._listFilmsExtraTopRatedComponent);
             remove(this._listFilmsExtraMostCommentedComponent);
             this._renderExtra();
-            this._onFilterChange();
+            this._onFilterSortRender();
           }
         });
   }
@@ -168,10 +174,30 @@ export default class PageController {
     this._showedFilmsControllers = [];
   }
 
-  _onFilterChange() {
+  /*onFilterChange() {
     this._removeFilms();
-    let filteredFilms = this._filmsModel.getFilms().slice(0, this._showingFilmsCount);
+    const filteredFilms = this._filmsModel.getFilms().slice(0, this._showingFilmsCount);
     this._showedFilmsControllers = renderFilms(this._listFilmsStandardContainerElement, filteredFilms, this._onDataChange, this._onViewChange, this._api);
     this._renderButtonShowMoreComponent();
+  }*/
+
+  _onFilterSortRender() {
+    this._removeFilms();
+    const films = this._filmsModel.getFilms();
+    let sortedFilms = [];
+    switch (this._currentSortType) {
+      case SortType.DATE:
+        sortedFilms = films.sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));
+        break;
+      case SortType.RATING:
+        sortedFilms = films.sort((a, b) => a.rating - b.rating);
+        break;
+      case SortType.DEFAULT:
+        sortedFilms = films.slice();
+        break;
+    }
+    renderFilms(this._listFilmsStandardContainerElement, sortedFilms.slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange, this._api);
+    this._renderButtonShowMoreComponent();
   }
+
 }
