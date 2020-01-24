@@ -1,4 +1,9 @@
-import {FilterType} from '../mock/filter';
+const FilterType = {
+  ALL: `all movies`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`,
+};
 
 export const getWatchlistCount = (films) => {
   return films.filter((it) => it.isWatchlist);

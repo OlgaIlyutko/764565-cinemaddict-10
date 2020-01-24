@@ -1,5 +1,11 @@
 import {getFilmsByFilter} from '../utils/filter';
-import {FilterType} from '../mock/filter';
+
+const FilterType = {
+  ALL: `all movies`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`,
+};
 
 export default class Movies {
   constructor() {
@@ -8,6 +14,7 @@ export default class Movies {
 
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
+    this._sortChangeHandlers = [];
   }
 
   getFilms() {
