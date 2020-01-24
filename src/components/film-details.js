@@ -1,7 +1,6 @@
 import {getFormatedDate, getFormattedDuration} from '../utils/formatting';
 import AbstractSmartComponent from './abstract-smart-component';
 import {formateDateTime} from '../utils/formatting';
-import he from 'he';
 
 const ENTER_KEYCODE = 13;
 const CTRL_KEYCODE = 17;
@@ -199,6 +198,18 @@ export default class FilmDetails extends AbstractSmartComponent {
   enableCommentForm() {
     this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
     this.getElement().querySelector(`.film-details__comment-input`).style.backgroundColor = `white`;
+  }
+
+  disableRatingBlock() {
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
+      it.disabled = true;
+    });
+  }
+
+  enableRatingBlock() {
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
+      it.disabled = false;
+    });
   }
 
   recoveryListeners() {

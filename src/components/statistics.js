@@ -108,11 +108,16 @@ const getTopGenre = (films) => {
 };
 
 const createStatisticsTemplate = (watchedFilms) => {
-  const totalDuration = getFormattedDuration(getTotalDurationWatchedFilms(watchedFilms));
-  const durationHours = totalDuration.slice(0, totalDuration.indexOf(`h`));
-  const durationMin = totalDuration.slice(totalDuration.indexOf(`h`) + 2, totalDuration.indexOf(`min`));
+  let durationHours = 0;
+  let durationMin = 0;
+  let topGenre = `-`;
 
-  const topGenre = getTopGenre(watchedFilms);
+  if (watchedFilms.length !== 0) {
+    const totalDuration = getFormattedDuration(getTotalDurationWatchedFilms(watchedFilms));
+    durationHours = totalDuration.slice(0, totalDuration.indexOf(`h`));
+    durationMin = totalDuration.slice(totalDuration.indexOf(`h`) + 2, totalDuration.indexOf(`min`));
+    topGenre = getTopGenre(watchedFilms);
+  }
 
   const rank = document.querySelector(`.profile__rating`);
 
@@ -184,38 +189,56 @@ export default class Statistics extends AbstractSmartComponent {
       }
       switch (evt.target.getAttribute(`for`)) {
         case `statistic-week`:
-          this._filteredData = getWeekData(this._watchedFilms);
           this._currentPeriod = `statistic-week`;
-          this.rerender(this._filteredData);
           break;
         case `statistic-today`:
-          this._filteredData = getTodayData(this._watchedFilms);
           this._currentPeriod = `statistic-today`;
-          this.rerender(this._filteredData);
           break;
         case `statistic-year`:
-          this._filteredData = getYearData(this._watchedFilms);
           this._currentPeriod = `statistic-year`;
-          this.rerender(this._filteredData);
           break;
         case `statistic-month`:
-          this._filteredData = getMonthData(this._watchedFilms);
           this._currentPeriod = `statistic-month`;
-          this.rerender(this._filteredData);
           break;
         default:
-          this._filteredData = this._watchedFilms;
           this._currentPeriod = `statistic-all-time`;
-          this.rerender(this._filteredData);
       }
+      this.rerender();
     };
 
+    this._films.setDataChangeHandler(() => {
+      this.rerender();
+      this.hide();
+    });
+
+  }
+
+  _getChartData() {
+    let filteredData;
+    const watchedFilms = getWatchedFilms(this._films.getFilmsAll());
+    switch (this._currentPeriod) {
+      case `statistic-week`:
+        filteredData = getWeekData(watchedFilms);
+        break;
+      case `statistic-today`:
+        filteredData = getTodayData(watchedFilms);
+        break;
+      case `statistic-year`:
+        filteredData = getYearData(watchedFilms);
+        break;
+      case `statistic-month`:
+        filteredData = getMonthData(watchedFilms);
+        break;
+      default:
+        filteredData = getWatchedFilms(this._films.getFilmsAll());
+    }
+    return filteredData;
   }
 
   show() {
     super.show();
 
-    this.rerender(this._watchedFilms);
+    this.rerender();
   }
 
   recoveryListeners() {}
@@ -230,16 +253,17 @@ export default class Statistics extends AbstractSmartComponent {
     currentfilterStatButton.checked = true;
   }
 
-  rerender(films) {
+  rerender() {
+
     super.rerender();
 
     this.setActivePeriod();
 
-    this._renderCharts(films);
+    this._renderCharts();
     this._onActivePeriodStat();
   }
 
-  _renderCharts(allFilms) {
+  _renderCharts() {
 
     const element = this.getElement();
 
@@ -247,7 +271,7 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._resetCharts();
 
-    this._genreChart = renderGenreChart(genreCtx, allFilms);
+    this._genreChart = renderGenreChart(genreCtx, this._getChartData());
   }
 
   _resetCharts() {
@@ -262,6 +286,6 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createStatisticsTemplate(this._filteredData);
+    return createStatisticsTemplate(this._getChartData());
   }
 }

@@ -14,7 +14,7 @@ const createFilterTemplate = (filters) => {
   const filtersMarkup = filters.map((it) => createFilterMarkup(it, it.checked)).join(``);
   return (
     `<nav class="main-navigation">
-    
+      <a href="#all" class="main-navigation__item main-navigation__item--active">All moves</a>
       ${filtersMarkup}
       <a href="#stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
     </nav>`
@@ -59,7 +59,7 @@ export default class Filter extends AbstractComponent {
     });
   }
 
-  setMenuChangeHadler(handler) {
+  setMenuChangeHandler(handler) {
     if (!handler) {
       return;
     }

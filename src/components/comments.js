@@ -1,5 +1,6 @@
 import AbstractComponent from './abstract-component';
 import {formateDateTime} from '../utils/formatting';
+import he from 'he';
 
 export default class CommentsFilm extends AbstractComponent {
   constructor(comments) {
@@ -14,7 +15,7 @@ export default class CommentsFilm extends AbstractComponent {
           <img src="./images/emoji/${it.img}.png" width="55" height="55" alt="emoji">
         </span>
         <div>
-          <p class="film-details__comment-text">${it.commentText}</p>
+          <p class="film-details__comment-text">${he.encode(it.commentText)}</p>
             <p class="film-details__comment-info">
             <span class="film-details__comment-author">${it.commentAuthor}</span>
             <span class="film-details__comment-day">${formateDateTime(it.commentDay)}</span>
