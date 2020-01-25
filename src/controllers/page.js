@@ -43,10 +43,10 @@ export default class PageController {
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
-    this._filterSortRender = this._filterSortRender.bind(this);
+    this._onFilterSortRender = this._onFilterSortRender.bind(this);
 
-    this._filmsModel.setSortChangeHandler(this._filterSortRender);
-    this._filmsModel.setFilterChangeHandler(this._filterSortRender);
+    this._filmsModel.setSortChangeHandler(this._onFilterSortRender);
+    this._filmsModel.setFilterChangeHandler(this._onFilterSortRender);
 
   }
 
@@ -131,7 +131,7 @@ export default class PageController {
     this._showedFilmsControllers = [];
   }
 
-  _filterSortRender() {//вопрос - нужно ли тут название с on
+  _onFilterSortRender() {
     this._removeFilms();
     const films = this._filmsModel.getFilms();
     this._showedFilmsControllers = renderFilms(this._listFilmsStandardContainerElement, films.slice(0, this._showingFilmsCount), this._onDataChange, this._onViewChange, this._api);
@@ -148,7 +148,7 @@ export default class PageController {
             remove(this._listFilmsExtraTopRatedComponent);
             remove(this._listFilmsExtraMostCommentedComponent);
             this._renderExtraBlock();
-            this._filterSortRender();
+            this._onFilterSortRender();
           }
         });
   }

@@ -39,16 +39,16 @@ export default class MovieController {
 
     this._filmDetailsComponent.setCloseButtonClickHandler(() => this._filmPopupClose());
 
-    this._cardFilmComponent.setToWatchlistClickHandler(this._toWatchlistClickHandler.bind(this, film));
-    this._filmDetailsComponent.setToWatchlistClickHandler(this._toWatchlistClickHandler.bind(this, film));
+    this._cardFilmComponent.setToWatchlistClickHandler(this._onWatchlistClick.bind(this, film));
+    this._filmDetailsComponent.setToWatchlistClickHandler(this._onWatchlistClick.bind(this, film));
 
-    this._cardFilmComponent.setWatchedClickHandler(this._watchedClickHandler.bind(this, film));
-    this._filmDetailsComponent.setWatchedClickHandler(this._watchedClickHandler.bind(this, film));
+    this._cardFilmComponent.setWatchedClickHandler(this._onWatchedClick.bind(this, film));
+    this._filmDetailsComponent.setWatchedClickHandler(this._onWatchedClick.bind(this, film));
 
-    this._cardFilmComponent.setToFavoritesClickHandler(this._toFavoritesClickHandler.bind(this, film));
-    this._filmDetailsComponent.setToFavoritesClickHandler(this._toFavoritesClickHandler.bind(this, film));
+    this._cardFilmComponent.setToFavoritesClickHandler(this._onFavoritesClick.bind(this, film));
+    this._filmDetailsComponent.setToFavoritesClickHandler(this._onFavoritesClick.bind(this, film));
 
-    this._filmDetailsComponent.setToSentPersonalRating(this._personalRatingSentHandler.bind(this, film));
+    this._filmDetailsComponent.setToSentPersonalRating(this._onPersonalRatingSet.bind(this, film));
 
     if (oldFilmDetailsComponent && oldCardFilmComponent) {
       replace(this._cardFilmComponent, oldCardFilmComponent);
@@ -86,13 +86,13 @@ export default class MovieController {
     }
   }
 
-  _toWatchlistClickHandler(film) {
+  _onWatchlistClick(film) {
     const updateFilm = Film.clone(film);
     updateFilm.isWatchlist = !film.isWatchlist;
     this._onDataChange(this, film, updateFilm);
   }
 
-  _watchedClickHandler(film) {
+  _onWatchedClick(film) {
     const updateFilm = Film.clone(film);
     updateFilm.isWatched = !film.isWatched;
     updateFilm.watchedDate = new Date();
@@ -102,13 +102,13 @@ export default class MovieController {
     this._onDataChange(this, film, updateFilm);
   }
 
-  _toFavoritesClickHandler(film) {
+  _onFavoritesClick(film) {
     const updateFilm = Film.clone(film);
     updateFilm.isFavorite = !film.isFavorite;
     this._onDataChange(this, film, updateFilm);
   }
 
-  _personalRatingSentHandler(film, newPersonalRating) {
+  _onPersonalRatingSet(film, newPersonalRating) {
     const idNewPersonalRating = `label[for=rating-` + newPersonalRating + `]`;
     this._filmDetailsComponent.disableRatingBlock();
     const updateFilm = Film.clone(film);

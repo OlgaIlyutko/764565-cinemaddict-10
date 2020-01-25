@@ -176,8 +176,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     element.querySelector(`#watchlist`)
       .addEventListener(`click`, () => {
         this._isWatchlist = !this._isWatchlist;
-        if (this._toWatchlistClickHandler) {
-          this._toWatchlistClickHandler();
+        if (this._onWatchlistClick) {
+          this._onWatchlistClick();
         }
       });
 
@@ -185,23 +185,23 @@ export default class FilmDetails extends AbstractSmartComponent {
       .addEventListener(`click`, () => {
         this._isWatched = !this._isWatched;
         this._addToWachist = !this._addToWachist;
-        if (this._watchedClickHandler) {
-          this._watchedClickHandler();
+        if (this._onWatchedClick) {
+          this._onWatchedClick();
         }
       });
 
     element.querySelector(`#favorite`)
       .addEventListener(`click`, () => {
         this._isFavorite = !this._isFavorite;
-        if (this._toFavoritesClickHandler) {
-          this._toFavoritesClickHandler();
+        if (this._onFavoritesClick) {
+          this._onFavoritesClick();
         }
       });
 
     element.querySelectorAll(`.film-details__user-rating-input`).forEach((item) => {
       item.addEventListener(`click`, (evt) => {
-        if (this._personalRatingSentHandler) {
-          this._personalRatingSentHandler(evt.target.value);
+        if (this._onPersonalRatingSet) {
+          this._onPersonalRatingSet(evt.target.value);
         }
       });
     });
@@ -209,8 +209,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     if (element.querySelector(`.film-details__watched-reset`)) {
       element.querySelector(`.film-details__watched-reset`)
       .addEventListener(`click`, () => {
-        if (this._watchedClickHandler) {
-          this._watchedClickHandler();
+        if (this._onWatchedClick) {
+          this._onWatchedClick();
         }
       });
     }
@@ -248,19 +248,19 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   setToWatchlistClickHandler(handler) {
-    this._toWatchlistClickHandler = handler;
+    this._onWatchlistClick = handler;
   }
 
   setWatchedClickHandler(handler) {
-    this._watchedClickHandler = handler;
+    this._onWatchedClick = handler;
   }
 
   setToFavoritesClickHandler(handler) {
-    this._toFavoritesClickHandler = handler;
+    this._onFavoritesClick = handler;
   }
 
   setToSentPersonalRating(handler) {
-    this._personalRatingSentHandler = handler;
+    this._onPersonalRatingSet = handler;
   }
 
   setSubmitCommentHandler(handler) {
