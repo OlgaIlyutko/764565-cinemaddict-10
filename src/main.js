@@ -5,6 +5,7 @@ import MoviesModel from './models/movies';
 import PageController from './controllers/page';
 import StatisticsComponent from './components/statistics';
 import Footer from './components/footer';
+import Loading from './components/loading';
 import {render, RenderPosition} from './utils/render';
 
 const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=`;
@@ -14,16 +15,18 @@ const api = new API(END_POINT, AUTHORIZATION);
 const filmsModel = new MoviesModel();
 const siteHeaderElement = document.querySelector(`header`);
 
+let siteMainElement = document.querySelector(`main`);//вопрос - тут let или const
+const loadingComponent = new Loading();
+siteMainElement.innerHTML = loadingComponent.getTemplate();
 
-const siteMainElement = document.querySelector(`main`);
-
-const filterController = new FilterController(siteMainElement, filmsModel);
-const pageController = new PageController(siteMainElement, filmsModel, api);
-siteMainElement.innerHTML = `<h2 class="films-list__title">Loading...</h2>`;
 
 api.getFilms()
   .then((films) => {
     siteMainElement.innerHTML = ``;
+
+    const filterController = new FilterController(siteMainElement, filmsModel);
+    const pageController = new PageController(siteMainElement, filmsModel, api);
+
     filmsModel.setFilms(films);
     filterController.render();
     pageController.render();

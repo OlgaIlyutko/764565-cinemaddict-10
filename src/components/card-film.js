@@ -32,6 +32,7 @@ export default class CardFilm extends AbstractComponent {
     super();
     this._film = film;
   }
+
   getTemplate() {
     return createCardFilmTemplate(this._film);
   }

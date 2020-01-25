@@ -31,15 +31,16 @@ export default class Filter extends AbstractComponent {
     super();
     this._filters = filters;
   }
+
   getTemplate() {
     return createFilterTemplate(this._filters);
   }
 
   setFilterChangeHandler(handler) {
     const changeActiveClass = (evt) => {
-      const filterButton = document.querySelectorAll(`.main-navigation__item `);
+      const filterButtonElement = document.querySelectorAll(`.main-navigation__item `);
 
-      const currentfilterButton = Array.from(filterButton).find((it) => {
+      const currentfilterButton = Array.from(filterButtonElement).find((it) => {
         return it.classList.contains(`main-navigation__item--active`);
       });
       currentfilterButton.classList.remove(`main-navigation__item--active`);

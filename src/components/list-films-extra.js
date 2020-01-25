@@ -12,6 +12,7 @@ export default class ListFilmsExtra extends AbstractComponent {
     super();
     this._thema = thema;
   }
+
   getTemplate() {
     return createListFilmsExtraTemplate(this._thema);
   }

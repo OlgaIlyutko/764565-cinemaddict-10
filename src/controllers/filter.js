@@ -3,7 +3,6 @@ import {render, replace, RenderPosition} from '../utils/render.js';
 import {getFilmsByFilter} from '../utils/filter.js';
 
 const FilterType = {
- //ALL: `all movies`,
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
   FAVORITES: `favorites`,
@@ -23,7 +22,6 @@ export default class FilterController {
     this._filmsModel.setDataChangeHandler(this._onDataChange);
 
     this._pageSwapHandler = null;
-
   }
 
   render() {

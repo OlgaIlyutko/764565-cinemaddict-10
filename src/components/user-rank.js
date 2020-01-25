@@ -1,7 +1,7 @@
-import {uppercaseFirst} from '../utils/formatting';
 import AbstractSmartComponent from './abstract-smart-component';
+import {uppercaseFirst} from '../utils/formatting';
 
-const USER_RANK = [
+const USER_RANKS = [
   {
     min: 0,
     max: 0,
@@ -34,7 +34,6 @@ export default class UserRank extends AbstractSmartComponent {
   constructor(filmsModel) {
     super();
     this._filmsModel = filmsModel;
-    this._films = this._filmsModel.getFilmsAll();
 
     this._filmsModel.setDataChangeHandler(() => {
       this.rerender();
@@ -46,8 +45,8 @@ export default class UserRank extends AbstractSmartComponent {
   }
 
   _getUserRank() {
-    const watchedFilms = this._films.filter((it) => it.isWatched);
-    const userRankElement = USER_RANK.find((it) => {
+    const watchedFilms = this._filmsModel.getFilmsAll().filter((it) => it.isWatched);
+    const userRankElement = USER_RANKS.find((it) => {
       return watchedFilms.length >= it.min && watchedFilms.length <= it.max;
     });
     return userRankElement.text;

@@ -170,48 +170,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     }, this._addToWachist);
   }
 
-  setCloseButtonClickHandler(handler) {
-    this._closeButtonHandler = handler;
-  }
-
-  setToWatchlistClickHandler(handler) {
-    this._toWatchlistClickHandler = handler;
-  }
-
-  setWatchedClickHandler(handler) {
-    this._watchedClickHandler = handler;
-  }
-
-  setToFavoritesClickHandler(handler) {
-    this._toFavoritesClickHandler = handler;
-  }
-
-  setToSentPersonalRating(handler) {
-    this._toSentPersonalRating = handler;
-  }
-
-  disableCommentForm() {
-    this.getElement().querySelector(`.film-details__comment-input`).disabled = true;
-    this.getElement().querySelector(`.film-details__comment-input`).style.backgroundColor = `grey`;
-  }
-
-  enableCommentForm() {
-    this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
-    this.getElement().querySelector(`.film-details__comment-input`).style.backgroundColor = `white`;
-  }
-
-  disableRatingBlock() {
-    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
-      it.disabled = true;
-    });
-  }
-
-  enableRatingBlock() {
-    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
-      it.disabled = false;
-    });
-  }
-
   recoveryListeners() {
     const element = this.getElement();
 
@@ -242,8 +200,8 @@ export default class FilmDetails extends AbstractSmartComponent {
 
     element.querySelectorAll(`.film-details__user-rating-input`).forEach((item) => {
       item.addEventListener(`click`, (evt) => {
-        if (this._toSentPersonalRating) {
-          this._toSentPersonalRating(evt.target.value);
+        if (this._personalRatingSentHandler) {
+          this._personalRatingSentHandler(evt.target.value);
         }
       });
     });
@@ -263,19 +221,65 @@ export default class FilmDetails extends AbstractSmartComponent {
       });
   }
 
+  disableCommentForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = true;
+    this.getElement().querySelector(`.film-details__comment-input`).style.backgroundColor = `grey`;
+  }
+
+  enableCommentForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
+    this.getElement().querySelector(`.film-details__comment-input`).style.backgroundColor = `white`;
+  }
+
+  disableRatingBlock() {
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
+      it.disabled = true;
+    });
+  }
+
+  enableRatingBlock() {
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
+      it.disabled = false;
+    });
+  }
+
+  setCloseButtonClickHandler(handler) {
+    this._closeButtonHandler = handler;
+  }
+
+  setToWatchlistClickHandler(handler) {
+    this._toWatchlistClickHandler = handler;
+  }
+
+  setWatchedClickHandler(handler) {
+    this._watchedClickHandler = handler;
+  }
+
+  setToFavoritesClickHandler(handler) {
+    this._toFavoritesClickHandler = handler;
+  }
+
+  setToSentPersonalRating(handler) {
+    this._personalRatingSentHandler = handler;
+  }
+
   setSubmitCommentHandler(handler) {
     let pressed = new Set();
 
     const getNewCommentEmoji = () => {
-      const emojiFullName = this.getElement().querySelector(`.film-details__add-emoji-label img`).src.split(`/`);
+      const emojiElement = this.getElement().querySelector(`.film-details__add-emoji-label img`);
+      if (!emojiElement) {
+        return ``;
+      }
+      const emojiFullName = emojiElement.src.split(`/`);
       const emojiName = emojiFullName[emojiFullName.length - 1];
       const emojiIndex = emojiName.lastIndexOf(`.`);
       return emojiName.slice(0, emojiIndex);
     };
 
     const getNewCommentText = () => {
-      const text = this.getElement().querySelector(`.film-details__comment-input`);
-      return text.value;
+      const textElement = this.getElement().querySelector(`.film-details__comment-input`);
+      return textElement.value;
     };
 
     this.getElement().querySelector(`form`).addEventListener(`keydown`, function (event) {

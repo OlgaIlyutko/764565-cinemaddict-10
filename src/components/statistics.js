@@ -4,21 +4,21 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {getFormattedDuration} from '../utils/formatting';
 import moment from 'moment';
 
-const getWeekData = (data) => {
+const getWeekData = (films) => {
   const start = moment().subtract(`days`, 7);
-  return data.filter((it) => moment(it.watchedDate).isAfter(start._d));
+  return films.filter((it) => moment(it.watchedDate).isAfter(start._d));
 };
-const getTodayData = (data) => {
+const getTodayData = (films) => {
   const start = moment().startOf(`day`);
-  return data.filter((it) => moment(it.watchedDate).isAfter(start._d));
+  return films.filter((it) => moment(it.watchedDate).isAfter(start._d));
 };
-const getYearData = (data) => {
+const getYearData = (films) => {
   const start = moment().subtract(`years`, 1);
-  return data.filter((it) => moment(it.watchedDate).isAfter(start._d));
+  return films.filter((it) => moment(it.watchedDate).isAfter(start._d));
 };
-const getMonthData = (data) => {
+const getMonthData = (films) => {
   const start = moment().subtract(`months`, 1);
-  return data.filter((it) => moment(it.watchedDate).isAfter(start._d));
+  return films.filter((it) => moment(it.watchedDate).isAfter(start._d));
 };
 
 const getUniqItems = (item, index, array) => {
@@ -119,14 +119,14 @@ const createStatisticsTemplate = (watchedFilms) => {
     topGenre = getTopGenre(watchedFilms);
   }
 
-  const rank = document.querySelector(`.profile__rating`);
+  const rankElement = document.querySelector(`.profile__rating`);
 
   return (
     `<section class="statistic">
       <p class="statistic__rank">
         Your rank
         <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-        <span class="statistic__rank-label">${rank.textContent}</span>
+        <span class="statistic__rank-label">${rankElement.textContent}</span>
       </p>
 
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -213,6 +213,56 @@ export default class Statistics extends AbstractSmartComponent {
 
   }
 
+  show() {
+    super.show();
+
+    this.rerender();
+  }
+
+  recoveryListeners() {}
+
+  rerender() {
+
+    super.rerender();
+
+    this.setActivePeriod();
+
+    this._renderCharts();
+    this._onActivePeriodStat();
+  }
+
+  getTemplate() {
+    return createStatisticsTemplate(this._getChartData());
+  }
+
+  setActivePeriod() {
+    const inputAllElement = document.querySelectorAll(`.statistic__filters-input`);
+
+    const currentfilterStatButton = Array.from(inputAllElement).find((it) => {
+      return it.id === this._currentPeriod;
+    });
+
+    currentfilterStatButton.checked = true;
+  }
+
+  _renderCharts() {
+
+    const element = this.getElement();
+
+    const genreCtxElement = element.querySelector(`.statistic__chart`);
+
+    this._resetCharts();
+
+    this._genreChart = renderGenreChart(genreCtxElement, this._getChartData());
+  }
+
+  _resetCharts() {
+    if (this._genreChart) {
+      this._genreChart.destroy();
+      this._genreChart = null;
+    }
+  }
+
   _getChartData() {
     let filteredData;
     const watchedFilms = getWatchedFilms(this._films.getFilmsAll());
@@ -235,57 +285,7 @@ export default class Statistics extends AbstractSmartComponent {
     return filteredData;
   }
 
-  show() {
-    super.show();
-
-    this.rerender();
-  }
-
-  recoveryListeners() {}
-
-  setActivePeriod() {
-    const inputAll = document.querySelectorAll(`.statistic__filters-input`);
-
-    const currentfilterStatButton = Array.from(inputAll).find((it) => {
-      return it.id === this._currentPeriod;
-    });
-
-    currentfilterStatButton.checked = true;
-  }
-
-  rerender() {
-
-    super.rerender();
-
-    this.setActivePeriod();
-
-    this._renderCharts();
-    this._onActivePeriodStat();
-  }
-
-  _renderCharts() {
-
-    const element = this.getElement();
-
-    const genreCtx = element.querySelector(`.statistic__chart`);
-
-    this._resetCharts();
-
-    this._genreChart = renderGenreChart(genreCtx, this._getChartData());
-  }
-
-  _resetCharts() {
-    if (this._genreChart) {
-      this._genreChart.destroy();
-      this._genreChart = null;
-    }
-  }
-
   _onActivePeriodStat() {
     this.getElement().addEventListener(`click`, this._filterChangeHandler);
-  }
-
-  getTemplate() {
-    return createStatisticsTemplate(this._getChartData());
   }
 }

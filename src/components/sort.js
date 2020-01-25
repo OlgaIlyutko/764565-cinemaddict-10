@@ -23,11 +23,11 @@ export default class Sort extends AbstractComponent {
     return createSortTemplate();
   }
 
-  setSortTypeChangeHandler(handler) {
+  setSortChangeHandler(handler) {
     const changeActiveClass = (evt) => {
-      const sortButton = document.querySelectorAll(`.sort__button`);
+      const sortButtonElement = document.querySelectorAll(`.sort__button`);
 
-      const currentSortButton = Array.from(sortButton).find((it) => {
+      const currentSortButton = Array.from(sortButtonElement).find((it) => {
         return it.dataset.sortType === this._currentSortType;
       });
       currentSortButton.classList.remove(`sort__button--active`);
@@ -52,5 +52,4 @@ export default class Sort extends AbstractComponent {
       handler(this._currentSortType);
     });
   }
-
 }

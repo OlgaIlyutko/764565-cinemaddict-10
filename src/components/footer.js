@@ -5,6 +5,7 @@ export default class Footer extends AbstractComponent {
     super();
     this._moviesLength = moviesLength;
   }
+
   getTemplate() {
     return `<footer class="footer">
     <section class="footer__logo logo logo--smaller">

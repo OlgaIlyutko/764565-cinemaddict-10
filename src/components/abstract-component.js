@@ -1,4 +1,5 @@
 import {createElement} from '../utils/render';
+
 const HIDDEN_CLASS = `visually-hidden`;
 
 export default class AbstractComponent {
@@ -33,5 +34,4 @@ export default class AbstractComponent {
       this._element.classList.add(HIDDEN_CLASS);
     }
   }
-
 }

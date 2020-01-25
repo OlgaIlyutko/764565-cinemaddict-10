@@ -1,25 +1,25 @@
 export default class Film {
-  constructor(data) {
-    this.id = data[`id`];
-    this.comments = data[`comments`];
-    this.poster = data[`film_info`][`poster`];
-    this.ageLimit = data[`film_info`][`age_rating`];
-    this.title = data[`film_info`][`title`];
-    this.alternativeTitle = data[`film_info`][`alternative_title`];
-    this.rating = data[`film_info`][`total_rating`];
-    this.director = data[`film_info`][`director`];
-    this.writers = data[`film_info`][`writers`];
-    this.actors = data[`film_info`][`actors`];
-    this.releaseDate = data[`film_info`][`release`][`date`];
-    this.country = data[`film_info`][`release`][`release_country`];
-    this.duration = data[`film_info`][`runtime`];
-    this.genres = data[`film_info`][`genre`];
-    this.description = data[`film_info`][`description`];
-    this.personalRating = data[`user_details`][`personal_rating`];
-    this.isWatchlist = Boolean(data[`user_details`][`watchlist`]);
-    this.isWatched = Boolean(data[`user_details`][`already_watched`]);
-    this.watchedDate = data[`user_details`][`watching_date`];
-    this.isFavorite = Boolean(data[`user_details`][`favorite`]);
+  constructor(film) {
+    this.id = film[`id`];
+    this.comments = film[`comments`];
+    this.poster = film[`film_info`][`poster`];
+    this.ageLimit = film[`film_info`][`age_rating`];
+    this.title = film[`film_info`][`title`];
+    this.alternativeTitle = film[`film_info`][`alternative_title`];
+    this.rating = film[`film_info`][`total_rating`];
+    this.director = film[`film_info`][`director`];
+    this.writers = film[`film_info`][`writers`];
+    this.actors = film[`film_info`][`actors`];
+    this.releaseDate = film[`film_info`][`release`][`date`];
+    this.country = film[`film_info`][`release`][`release_country`];
+    this.duration = film[`film_info`][`runtime`];
+    this.genres = film[`film_info`][`genre`];
+    this.description = film[`film_info`][`description`];
+    this.personalRating = film[`user_details`][`personal_rating`];
+    this.isWatchlist = Boolean(film[`user_details`][`watchlist`]);
+    this.isWatched = Boolean(film[`user_details`][`already_watched`]);
+    this.watchedDate = film[`user_details`][`watching_date`];
+    this.isFavorite = Boolean(film[`user_details`][`favorite`]);
   }
 
   toRAW() {
@@ -53,15 +53,15 @@ export default class Film {
     };
   }
 
-  static parseFilm(data) {
-    return new Film(data);
+  static parseFilm(film) {
+    return new Film(film);
   }
 
-  static parseFilms(data) {
-    return data.map(Film.parseFilm);
+  static parseFilms(films) {
+    return films.map(Film.parseFilm);
   }
 
-  static clone(data) {
-    return new Film(data.toRAW());
+  static clone(film) {
+    return new Film(film.toRAW());
   }
 }
