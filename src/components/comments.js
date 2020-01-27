@@ -81,8 +81,7 @@ export default class CommentsFilm extends AbstractComponent {
       if (evt.target.tagName !== `IMG`) {
         return;
       }
-      const emojiCurrent = evt.target;
-      handler(emojiCurrent.cloneNode(false));
+      handler(evt);
     });
   }
 }
