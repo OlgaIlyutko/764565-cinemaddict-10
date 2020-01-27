@@ -77,12 +77,13 @@ export default class MovieController {
     }
   }
 
-  _emojiCommentSetHandler(element) {
+  _emojiCommentSetHandler(evt) {
+    const emojiCurrentElement = evt.target.cloneNode(false);
     const containerElement = this._filmDetailsComponent.getElement().querySelector(`.film-details__add-emoji-label`);
     if (!containerElement.childNodes.length) {
-      containerElement.insertAdjacentElement(`afterbegin`, element);
+      containerElement.insertAdjacentElement(`afterbegin`, emojiCurrentElement);
     } else {
-      containerElement.replaceChild(element, containerElement.firstChild);
+      containerElement.replaceChild(emojiCurrentElement, containerElement.firstChild);
     }
   }
 

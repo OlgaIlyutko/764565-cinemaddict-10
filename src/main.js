@@ -15,7 +15,7 @@ const api = new API(END_POINT, AUTHORIZATION);
 const filmsModel = new MoviesModel();
 const siteHeaderElement = document.querySelector(`header`);
 
-let siteMainElement = document.querySelector(`main`);//вопрос - тут let или const
+const siteMainElement = document.querySelector(`main`);
 const loadingComponent = new Loading();
 siteMainElement.innerHTML = loadingComponent.getTemplate();
 
