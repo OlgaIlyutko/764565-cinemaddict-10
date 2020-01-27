@@ -14,7 +14,7 @@ const createFilterTemplate = (filters) => {
   const filtersMarkup = filters.map((it) => createFilterMarkup(it, it.checked)).join(``);
   return (
     `<nav class="main-navigation">
-    
+      <a href="#all" class="main-navigation__item main-navigation__item--active">All moves</a>
       ${filtersMarkup}
       <a href="#stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
     </nav>`
@@ -31,15 +31,16 @@ export default class Filter extends AbstractComponent {
     super();
     this._filters = filters;
   }
+
   getTemplate() {
     return createFilterTemplate(this._filters);
   }
 
   setFilterChangeHandler(handler) {
     const changeActiveClass = (evt) => {
-      const filterButton = document.querySelectorAll(`.main-navigation__item `);
+      const filterButtonElement = document.querySelectorAll(`.main-navigation__item `);
 
-      const currentfilterButton = Array.from(filterButton).find((it) => {
+      const currentfilterButton = Array.from(filterButtonElement).find((it) => {
         return it.classList.contains(`main-navigation__item--active`);
       });
       currentfilterButton.classList.remove(`main-navigation__item--active`);
@@ -59,7 +60,7 @@ export default class Filter extends AbstractComponent {
     });
   }
 
-  setMenuChangeHadler(handler) {
+  setMenuChangeHandler(handler) {
     if (!handler) {
       return;
     }

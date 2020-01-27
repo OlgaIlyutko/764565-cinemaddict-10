@@ -1,5 +1,6 @@
 import AbstractComponent from './abstract-component';
 import {formateDateTime} from '../utils/formatting';
+import he from 'he';
 
 export default class CommentsFilm extends AbstractComponent {
   constructor(comments) {
@@ -14,11 +15,11 @@ export default class CommentsFilm extends AbstractComponent {
           <img src="./images/emoji/${it.img}.png" width="55" height="55" alt="emoji">
         </span>
         <div>
-          <p class="film-details__comment-text">${it.commentText}</p>
+          <p class="film-details__comment-text">${he.encode(it.commentText)}</p>
             <p class="film-details__comment-info">
             <span class="film-details__comment-author">${it.commentAuthor}</span>
             <span class="film-details__comment-day">${formateDateTime(it.commentDay)}</span>
-            <button class="film-details__comment-delete">Delete</button>
+            <button class="film-details__comment-delete" data-id="${it.id}">Delete</button>
           </p>
         </div>
       </li>`).join(``);
@@ -69,17 +70,7 @@ export default class CommentsFilm extends AbstractComponent {
         return;
       }
 
-      let currentCommentButton = evt.target;
-
-      while (currentCommentButton.tagName !== `LI`) {
-        currentCommentButton = currentCommentButton.parentNode;
-      }
-
-      const commentIdElement = currentCommentButton.querySelector(`.film-details__comment-day`);
-      const commentId = commentIdElement.innerText;
-      currentCommentButton.remove();
-
-      handler(commentId);
+      handler(evt);
     });
   }
 

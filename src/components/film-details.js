@@ -1,7 +1,6 @@
 import {getFormatedDate, getFormattedDuration} from '../utils/formatting';
 import AbstractSmartComponent from './abstract-smart-component';
 import {formateDateTime} from '../utils/formatting';
-import he from 'he';
 
 const ENTER_KEYCODE = 13;
 const CTRL_KEYCODE = 17;
@@ -20,11 +19,11 @@ const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
 
           <div class="film-details__user-score">
             <div class="film-details__user-rating-poster">
-              <img src="./images/posters/the-great-flamarion.jpg" alt="film-poster" class="film-details__user-rating-img">
+              <img src=${poster} alt="film-poster" class="film-details__user-rating-img">
             </div>
 
             <section class="film-details__user-rating-inner">
-              <h3 class="film-details__user-rating-title">The Great Flamarion</h3>
+              <h3 class="film-details__user-rating-title">${title}</h3>
 
               <p class="film-details__user-rating-feelings">How you feel it?</p>
 
@@ -162,6 +161,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
     this.recoveryListeners();
   }
+
   getTemplate() {
     return createFilmDetailsTemplate(this._film, {
       isWatchlist: this._isWatchlist,
@@ -170,30 +170,14 @@ export default class FilmDetails extends AbstractSmartComponent {
     }, this._addToWachist);
   }
 
-  setCloseButtonClickHandler(handler) {
-    this._closeButtonHandler = handler;
-  }
-
-  setToWatchlistClickHandler(handler) {
-    this._toWatchlistClickHandler = handler;
-  }
-
-  setWatchedClickHandler(handler) {
-    this._watchedClickHandler = handler;
-  }
-
-  setToFavoritesClickHandler(handler) {
-    this._toFavoritesClickHandler = handler;
-  }
-
   recoveryListeners() {
     const element = this.getElement();
 
     element.querySelector(`#watchlist`)
       .addEventListener(`click`, () => {
         this._isWatchlist = !this._isWatchlist;
-        if (this._toWatchlistClickHandler) {
-          this._toWatchlistClickHandler();
+        if (this._onWatchlistClick) {
+          this._onWatchlistClick();
         }
       });
 
@@ -201,18 +185,35 @@ export default class FilmDetails extends AbstractSmartComponent {
       .addEventListener(`click`, () => {
         this._isWatched = !this._isWatched;
         this._addToWachist = !this._addToWachist;
-        if (this._watchedClickHandler) {
-          this._watchedClickHandler();
+        if (this._onWatchedClick) {
+          this._onWatchedClick();
         }
       });
 
     element.querySelector(`#favorite`)
       .addEventListener(`click`, () => {
         this._isFavorite = !this._isFavorite;
-        if (this._toFavoritesClickHandler) {
-          this._toFavoritesClickHandler();
+        if (this._onFavoritesClick) {
+          this._onFavoritesClick();
         }
       });
+
+    element.querySelectorAll(`.film-details__user-rating-input`).forEach((item) => {
+      item.addEventListener(`click`, (evt) => {
+        if (this._onPersonalRatingSet) {
+          this._onPersonalRatingSet(evt.target.value);
+        }
+      });
+    });
+
+    if (element.querySelector(`.film-details__watched-reset`)) {
+      element.querySelector(`.film-details__watched-reset`)
+      .addEventListener(`click`, () => {
+        if (this._onWatchedClick) {
+          this._onWatchedClick();
+        }
+      });
+    }
 
     element.querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, () => {
@@ -220,17 +221,65 @@ export default class FilmDetails extends AbstractSmartComponent {
       });
   }
 
+  disableCommentForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = true;
+    this.getElement().querySelector(`.film-details__comment-input`).style.backgroundColor = `grey`;
+  }
+
+  enableCommentForm() {
+    this.getElement().querySelector(`.film-details__comment-input`).disabled = false;
+    this.getElement().querySelector(`.film-details__comment-input`).style.backgroundColor = `white`;
+  }
+
+  disableRatingBlock() {
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
+      it.disabled = true;
+    });
+  }
+
+  enableRatingBlock() {
+    this.getElement().querySelectorAll(`.film-details__user-rating-input`).forEach((it) => {
+      it.disabled = false;
+    });
+  }
+
+  setCloseButtonClickHandler(handler) {
+    this._closeButtonHandler = handler;
+  }
+
+  setToWatchlistClickHandler(handler) {
+    this._onWatchlistClick = handler;
+  }
+
+  setWatchedClickHandler(handler) {
+    this._onWatchedClick = handler;
+  }
+
+  setToFavoritesClickHandler(handler) {
+    this._onFavoritesClick = handler;
+  }
+
+  setToSentPersonalRating(handler) {
+    this._onPersonalRatingSet = handler;
+  }
+
   setSubmitCommentHandler(handler) {
     let pressed = new Set();
 
     const getNewCommentEmoji = () => {
-      const emoji = this.getElement().querySelector(`.film-details__add-emoji-label img`).src.split(`/`);
-      return emoji[emoji.length - 1];
+      const emojiElement = this.getElement().querySelector(`.film-details__add-emoji-label img`);
+      if (!emojiElement) {
+        return ``;
+      }
+      const emojiFullName = emojiElement.src.split(`/`);
+      const emojiName = emojiFullName[emojiFullName.length - 1];
+      const emojiIndex = emojiName.lastIndexOf(`.`);
+      return emojiName.slice(0, emojiIndex);
     };
 
     const getNewCommentText = () => {
-      const text = this.getElement().querySelector(`.film-details__comment-input`);
-      return text.value;
+      const textElement = this.getElement().querySelector(`.film-details__comment-input`);
+      return textElement.value;
     };
 
     this.getElement().querySelector(`form`).addEventListener(`keydown`, function (event) {
