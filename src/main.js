@@ -8,6 +8,10 @@ import Footer from './components/footer';
 import Loading from './components/loading';
 import {render, RenderPosition} from './utils/render';
 
+const MenuPage = {
+  STATISTICS: `stats`,
+};
+
 const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=`;
 const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict/`;
 
@@ -40,7 +44,7 @@ api.getFilms()
 
     filterController.setMenuChangeHandler((menuItem) => {
       switch (menuItem) {
-        case `stats`:
+        case MenuPage.STATISTICS:
           pageController.hide();
           statisticsComponent.show();
           break;

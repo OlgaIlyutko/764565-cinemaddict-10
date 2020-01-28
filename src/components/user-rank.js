@@ -44,6 +44,12 @@ export default class UserRank extends AbstractSmartComponent {
     return createUserRankTemplate(this._getUserRank());
   }
 
+  recoveryListeners() {}
+
+  rerender() {
+    super.rerender();
+  }
+
   _getUserRank() {
     const watchedFilms = this._filmsModel.getFilmsAll().filter((it) => it.isWatched);
     const userRankElement = USER_RANKS.find((it) => {
@@ -51,10 +57,4 @@ export default class UserRank extends AbstractSmartComponent {
     });
     return userRankElement.text;
   }
-
-  rerender() {
-    super.rerender();
-  }
-
-  recoveryListeners() {}
 }

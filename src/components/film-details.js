@@ -2,6 +2,7 @@ import {getFormatedDate, getFormattedDuration} from '../utils/formatting';
 import AbstractSmartComponent from './abstract-smart-component';
 import {formateDateTime} from '../utils/formatting';
 
+const MAX_RAITING = 9;
 const ENTER_KEYCODE = 13;
 const CTRL_KEYCODE = 17;
 
@@ -9,6 +10,9 @@ const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
   const {poster, ageLimit, title, alternativeTitle, rating, director, writers, actors, releaseDate, duration, country, genres, description, personalRating} = filmInfo;
   const {isWatchlist, isWatched, isFavorite} = options;
   const getGenres = Array.from(genres).map((it) => `<span class="film-details__genre">${it}</span>`).join(``);
+
+  const personalRatingMarkup = new Array(MAX_RAITING).fill(``).map((it, index) => createPersonalRaitingMarkup(personalRating, index)).join(``);
+
   const generateRaitingBlock = () => {
     return (
       `<div class="form-details__middle-container">
@@ -28,33 +32,7 @@ const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
               <p class="film-details__user-rating-feelings">How you feel it?</p>
 
               <div class="film-details__user-rating-score">
-                <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="1" id="rating-1" ${personalRating === 1 ? `checked` : ``}>
-                <label class="film-details__user-rating-label" for="rating-1">1</label>
-
-                <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="2" id="rating-2" ${personalRating === 2 ? `checked` : ``}>
-                <label class="film-details__user-rating-label" for="rating-2">2</label>
-
-                <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="3" id="rating-3" ${personalRating === 3 ? `checked` : ``}>
-                <label class="film-details__user-rating-label" for="rating-3">3</label>
-
-                <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="4" id="rating-4" ${personalRating === 4 ? `checked` : ``}>
-                <label class="film-details__user-rating-label" for="rating-4">4</label>
-
-                <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="5" id="rating-5" ${personalRating === 5 ? `checked` : ``}>
-                <label class="film-details__user-rating-label" for="rating-5">5</label>
-
-                <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="6" id="rating-6" ${personalRating === 6 ? `checked` : ``}>
-                <label class="film-details__user-rating-label" for="rating-6">6</label>
-
-                <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="7" id="rating-7" ${personalRating === 7 ? `checked` : ``}>
-                <label class="film-details__user-rating-label" for="rating-7">7</label>
-
-                <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="8" id="rating-8" ${personalRating === 8 ? `checked` : ``}>
-                <label class="film-details__user-rating-label" for="rating-8">8</label>
-
-                <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="9" id="rating-9" ${personalRating === 9 ? `checked` : ``}>
-                <label class="film-details__user-rating-label" for="rating-9">9</label>
-
+              ${personalRatingMarkup}
               </div>
             </section>
           </div>
@@ -144,6 +122,12 @@ const createFilmDetailsTemplate = (filmInfo, options = {}, addToWachist) => {
       </form>
     </section>`
   );
+};
+
+const createPersonalRaitingMarkup = (personalRating, index) => {
+  const indexElement = index + 1;
+  return `<input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="${indexElement}" id="rating-${indexElement}" ${personalRating === indexElement ? `checked` : ``}>
+    <label class="film-details__user-rating-label" for="rating-${indexElement}">${indexElement}</label>`;
 };
 
 export default class FilmDetails extends AbstractSmartComponent {
@@ -264,7 +248,7 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   setSubmitCommentHandler(handler) {
-    let pressed = new Set();
+    const pressed = new Set();
 
     const getNewCommentEmoji = () => {
       const emojiElement = this.getElement().querySelector(`.film-details__add-emoji-label img`);
@@ -282,8 +266,8 @@ export default class FilmDetails extends AbstractSmartComponent {
       return textElement.value;
     };
 
-    this.getElement().querySelector(`form`).addEventListener(`keydown`, function (event) {
-      pressed.add(event.keyCode);
+    this.getElement().querySelector(`form`).addEventListener(`keydown`, (evt) => {
+      pressed.add(evt.keyCode);
       const codes = [ENTER_KEYCODE, CTRL_KEYCODE];
       for (let code of codes) {
         if (!pressed.has(code)) {
@@ -299,8 +283,8 @@ export default class FilmDetails extends AbstractSmartComponent {
       });
     });
 
-    this.getElement().querySelector(`form`).addEventListener(`keyup`, function (event) {
-      pressed.delete(event.keyCode);
+    this.getElement().querySelector(`form`).addEventListener(`keyup`, (evt) => {
+      pressed.delete(evt.keyCode);
     });
   }
 }

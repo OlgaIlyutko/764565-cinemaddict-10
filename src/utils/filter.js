@@ -37,9 +37,9 @@ export const sortFilmsBySort = (films, sortType) => {
   const sortedFilms = films.slice();
   switch (sortType) {
     case SortType.DATE:
-      return sortedFilms.slice().sort((a, b) => new Date(a.releaseDate) - new Date(b.releaseDate));
+      return sortedFilms.slice().sort((a, b) => new Date(b.releaseDate) - new Date(a.releaseDate));
     case SortType.RATING:
-      return sortedFilms.sort((a, b) => a.rating - b.rating);
+      return sortedFilms.sort((a, b) => b.rating - a.rating);
     case SortType.DEFAULT:
       return sortedFilms;
   }

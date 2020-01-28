@@ -4,11 +4,11 @@ const getFormatedDate = (date) => {
   return moment(date).format(`DD MMMM YYYY`);
 };
 
-const formateDateTime = function (dateTime) {
+const formateDateTime = (dateTime) => {
   return moment(dateTime).format(`YYYY/MM/DD HH:MM`);
 };
 
-const formateDateYear = function (dateTime) {
+const formateDateYear = (dateTime) => {
   return moment(dateTime).format(`YYYY`);
 };
 

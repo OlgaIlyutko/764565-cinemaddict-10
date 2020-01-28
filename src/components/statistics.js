@@ -4,20 +4,35 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import {getFormattedDuration} from '../utils/formatting';
 import moment from 'moment';
 
-const getWeekData = (films) => {
-  const start = moment().subtract(`days`, 7);
-  return films.filter((it) => moment(it.watchedDate).isAfter(start._d));
+const PeriodSortStatType = {
+  ALL: `statistic-all-time`,
+  TODAY: `statistic-today`,
+  WEEK: `statistic-week`,
+  MONTH: `statistic-month`,
+  YEAR: `statistic-year`,
 };
+
+const SortMomentType = {
+  DAY: `day`,
+  DAYS: `days`,
+  MONTH: `months`,
+  YEARS: `years`,
+};
+
 const getTodayData = (films) => {
-  const start = moment().startOf(`day`);
+  const start = moment().startOf(SortMomentType.DAY);
   return films.filter((it) => moment(it.watchedDate).isAfter(start._d));
 };
-const getYearData = (films) => {
-  const start = moment().subtract(`years`, 1);
+const getWeekData = (films) => {
+  const start = moment().subtract(SortMomentType.DAYS, 7);
   return films.filter((it) => moment(it.watchedDate).isAfter(start._d));
 };
 const getMonthData = (films) => {
-  const start = moment().subtract(`months`, 1);
+  const start = moment().subtract(SortMomentType.MONTH, 1);
+  return films.filter((it) => moment(it.watchedDate).isAfter(start._d));
+};
+const getYearData = (films) => {
+  const start = moment().subtract(SortMomentType.YEARS, 1);
   return films.filter((it) => moment(it.watchedDate).isAfter(start._d));
 };
 
@@ -179,7 +194,7 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._watchedFilms = getWatchedFilms(this._films.getFilmsAll());
     this._filteredData = this._watchedFilms;
-    this._currentPeriod = `statistic-all-time`;
+    this._currentPeriod = PeriodSortStatType.ALL;
 
     this._genreChart = null;
 
@@ -188,17 +203,17 @@ export default class Statistics extends AbstractSmartComponent {
         return;
       }
       switch (evt.target.getAttribute(`for`)) {
-        case `statistic-week`:
-          this._currentPeriod = `statistic-week`;
-          break;
-        case `statistic-today`:
+        case PeriodSortStatType.TODAY:
           this._currentPeriod = `statistic-today`;
           break;
-        case `statistic-year`:
-          this._currentPeriod = `statistic-year`;
+        case PeriodSortStatType.WEEK:
+          this._currentPeriod = `statistic-week`;
           break;
-        case `statistic-month`:
+        case PeriodSortStatType.MONTH:
           this._currentPeriod = `statistic-month`;
+          break;
+        case PeriodSortStatType.YEAR:
+          this._currentPeriod = `statistic-year`;
           break;
         default:
           this._currentPeriod = `statistic-all-time`;
@@ -264,25 +279,19 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   _getChartData() {
-    let filteredData;
     const watchedFilms = getWatchedFilms(this._films.getFilmsAll());
     switch (this._currentPeriod) {
-      case `statistic-week`:
-        filteredData = getWeekData(watchedFilms);
-        break;
-      case `statistic-today`:
-        filteredData = getTodayData(watchedFilms);
-        break;
-      case `statistic-year`:
-        filteredData = getYearData(watchedFilms);
-        break;
-      case `statistic-month`:
-        filteredData = getMonthData(watchedFilms);
-        break;
+      case PeriodSortStatType.TODAY:
+        return getTodayData(watchedFilms);
+      case PeriodSortStatType.WEEK:
+        return getWeekData(watchedFilms);
+      case PeriodSortStatType.MONTH:
+        return getMonthData(watchedFilms);
+      case PeriodSortStatType.YEAR:
+        return getYearData(watchedFilms);
       default:
-        filteredData = getWatchedFilms(this._films.getFilmsAll());
+        return getWatchedFilms(this._films.getFilmsAll());
     }
-    return filteredData;
   }
 
   _onActivePeriodStat() {

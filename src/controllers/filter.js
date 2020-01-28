@@ -24,6 +24,11 @@ export default class FilterController {
     this._pageSwapHandler = null;
   }
 
+  setMenuChangeHandler(handler) {
+    this._pageSwapHandler = handler;
+    this._filterComponent.setMenuChangeHandler(handler);
+  }
+
   render() {
     const container = this._container;
     const allFilms = this._filmsModel.getFilmsAll();
@@ -55,10 +60,5 @@ export default class FilterController {
 
   _onDataChange() {
     this.render();
-  }
-
-  setMenuChangeHandler(handler) {
-    this._pageSwapHandler = handler;
-    this._filterComponent.setMenuChangeHandler(handler);
   }
 }
