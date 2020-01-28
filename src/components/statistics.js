@@ -193,7 +193,6 @@ export default class Statistics extends AbstractSmartComponent {
     this._films = films;
 
     this._watchedFilms = getWatchedFilms(this._films.getFilmsAll());
-    this._filteredData = this._watchedFilms;
     this._currentPeriod = PeriodSortStatType.ALL;
 
     this._genreChart = null;
